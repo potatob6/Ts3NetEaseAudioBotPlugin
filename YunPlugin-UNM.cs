@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -3091,7 +3091,6 @@ public class YunPlgun : IBotPlugin /* or ICorePlugin */
         else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
         {
             string Location = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-            Console.WriteLine(Location);
             MyIni = new IniConfigSource(Location + "/data/plugins/YunSettings.ini"); // Linux 文件目录
         }
         var playMode_temp = MyIni.Configs["YunBot"].Get("playMode");
