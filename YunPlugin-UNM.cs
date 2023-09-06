@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -3094,7 +3094,7 @@ public class YunPlgun : IBotPlugin /* or ICorePlugin */
             MyIni = new IniConfigSource(Location + "/data/plugins/YunSettings.ini"); // Linux 文件目录
         }
         var playMode_temp = MyIni.Configs["YunBot"].Get("playMode");
-        var cookies1_temp = MyIni.Configs["YunBot"].Get("cookies1");
+        var cookies1_temp = MyIni.Configs["YunBot"].Get("cookies1").Split('"')[0];
         var WangYiYunAPI_Address_temp = MyIni.Configs["YunBot"].Get("WangYiYunAPI_Address");
         if (playMode_temp == "")
         {
@@ -3110,7 +3110,7 @@ public class YunPlgun : IBotPlugin /* or ICorePlugin */
         }
         else
         {
-            cookies1 = MyIni.Configs["YunBot"].Get("cookies1");
+            cookies1 = MyIni.Configs["YunBot"].Get("cookies1").Split('"')[0];
         }
         if (WangYiYunAPI_Address_temp == "")
         {
@@ -3596,7 +3596,7 @@ public class YunPlgun : IBotPlugin /* or ICorePlugin */
         }
         await tsClient.DeleteAvatar();
         changeCookies(cookies1);
-        MyIni.Configs["YunBot"].Set("cookies1", cookies1);
+        MyIni.Configs["YunBot"].Set("cookies1", @"""" + cookies1 + @"""");
         MyIni.Save();
         return result;
     }
