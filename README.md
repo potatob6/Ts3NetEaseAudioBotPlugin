@@ -1,12 +1,12 @@
 # TS3AudioBot-NetEaseCloudmusic-plugin
-在ZHANGTIANYAO1/TS3AudioBot-NetEaseCloudmusic-plugin的基础上兼容Linux.
+在[ZHANGTIANYAO1/TS3AudioBot-NetEaseCloudmusic-plugin](https://github.com/ZHANGTIANYAO1/TS3AudioBot-NetEaseCloudmusic-plugin)的基础上兼容Linux.
 支持版权歌曲解锁（还未实现）。
-使用 Nini https://github.com/bmatzelle/nini 实现ini文件的操作。
-使用 Costura.Fody https://github.com/Fody/Costura/ 打包。
+使用 [Nini](https://github.com/bmatzelle/nini) 实现ini文件的操作。
+使用 [Costura.Fody](https://github.com/Fody/Costura/) 打包。
 
 ## 关于解锁版权歌曲
-需要在自建的 网易云音乐API https://github.com/Binaryify/NeteaseCloudMusicApi（推荐Docker版）里面的 app.js 中添加 `process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0`。
-需要自建 UnblockNeteaseMusic https://github.com/UnblockNeteaseMusic/server 服务（推荐Docker版）。
+需要在自建的 [NeteaseCloudMusicApi](https://github.com/Binaryify/NeteaseCloudMusicApi)（推荐Docker版）里面的 app.js 中添加 `process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0`。
+需要自建 [UnblockNeteaseMusic](https://github.com/UnblockNeteaseMusic/server) 服务（推荐Docker版）。
 
 ## 关于设置文件YunSettings.ini
 `playMode=`是播放模式   
