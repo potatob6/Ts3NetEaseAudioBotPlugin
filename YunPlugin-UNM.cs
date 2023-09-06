@@ -3071,8 +3071,7 @@ public class MusicDetail
 
 public class YunPlgun : IBotPlugin /* or ICorePlugin */
 {
-    
-    static IConfigSource MyIni = new IniConfigSource("/app/data/plugins/YunSettings.ini");
+    static IConfigSource MyIni;
     PlayManager tempplayManager;
     InvokerData tempinvoker;
     Ts3Client tempts3Client;
@@ -3085,7 +3084,16 @@ public class YunPlgun : IBotPlugin /* or ICorePlugin */
     public static string WangYiYunAPI_Address;
     public void Initialize()
     {
-
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        {
+            _ = new IniConfigSource("plugins/YunSettings.ini"); // Windows 文件目录
+        }
+        else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+        {
+            string Location = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+            Console.WriteLine(Location);
+            _ = new IniConfigSource(Location + "/plugins/YunSettings.ini"); // Linux 文件目录
+        }
         var playMode_temp = MyIni.Configs["YunBot"].Get("playMode");
         var cookies1_temp = MyIni.Configs["YunBot"].Get("cookies1");
         var WangYiYunAPI_Address_temp = MyIni.Configs["YunBot"].Get("WangYiYunAPI_Address");
@@ -3589,7 +3597,7 @@ public class YunPlgun : IBotPlugin /* or ICorePlugin */
         }
         await tsClient.DeleteAvatar();
         changeCookies(cookies1);
-        MyIni.Configs["YunBot"].Set("cookies1",cookies1);
+        MyIni.Configs["YunBot"].Set("cookies1", cookies1);
         MyIni.Save();
         return result;
     }
