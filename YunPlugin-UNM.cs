@@ -3086,13 +3086,13 @@ public class YunPlgun : IBotPlugin /* or ICorePlugin */
     {
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
-            _ = new IniConfigSource("plugins/YunSettings.ini"); // Windows 文件目录
+            MyIni = new IniConfigSource("plugins/YunSettings.ini"); // Windows 文件目录
         }
         else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
         {
             string Location = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
             Console.WriteLine(Location);
-            _ = new IniConfigSource(Location + "/plugins/YunSettings.ini"); // Linux 文件目录
+            MyIni = new IniConfigSource(Location + "/data/plugins/YunSettings.ini"); // Linux 文件目录
         }
         var playMode_temp = MyIni.Configs["YunBot"].Get("playMode");
         var cookies1_temp = MyIni.Configs["YunBot"].Get("cookies1");

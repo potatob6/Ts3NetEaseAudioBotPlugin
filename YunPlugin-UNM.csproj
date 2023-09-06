@@ -4,13 +4,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="TS3AudioBot">
-      <HintPath>.\TS3AudioBot.dll</HintPath>
+      <HintPath>.\lib\TS3AudioBot.dll</HintPath>
     </Reference>
     <Reference Include="TSLib">
-      <HintPath>.\TSLib.dll</HintPath>
+      <HintPath>.\lib\TSLib.dll</HintPath>
     </Reference>
     <Reference Include="Trove.Nini">
-      <HintPath>.\Nini.dll</HintPath>
+      <HintPath>.\lib\Nini.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
