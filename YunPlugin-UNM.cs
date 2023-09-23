@@ -3082,6 +3082,7 @@ public class YunPlgun : IBotPlugin /* or ICorePlugin */
     public static ArrayList SongQueue = new ArrayList();
     SemaphoreSlim slimlock = new SemaphoreSlim(1, 1);
     public static string WangYiYunAPI_Address;
+    public static string UNM_Address;
     public void Initialize()
     {
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
@@ -3090,12 +3091,26 @@ public class YunPlgun : IBotPlugin /* or ICorePlugin */
         }
         else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
         {
+            string filePath = "/.dockerenv";// 判断是否为Docker版，Docker和Linux路径不一样。
+            if (File.Exists(filePath))
+            {
+                Console.WriteLine("运行在Docker环境.");
+                string Location = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+                Console.WriteLine(Location);
+                MyIni = new IniConfigSource(Location + "/data/plugins/YunSettings.ini"); // Linux 文件目录
+            }
+            else
+            {
+            Console.WriteLine("运行在Linux环境.");
             string Location = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-            MyIni = new IniConfigSource(Location + "/data/plugins/YunSettings.ini"); // Linux 文件目录
+            Console.WriteLine(Location);
+            MyIni = new IniConfigSource(Location + "/plugins/YunSettings.ini"); // Linux 文件目录
+            }
         }
         var playMode_temp = MyIni.Configs["YunBot"].Get("playMode");
         var cookies1_temp = MyIni.Configs["YunBot"].Get("cookies1").Split('"')[0];
         var WangYiYunAPI_Address_temp = MyIni.Configs["YunBot"].Get("WangYiYunAPI_Address");
+        var UNM_Address_temp = MyIni.Configs["YunBot"].Get("UNM_Address");
         if (playMode_temp == "")
         {
             playMode = 0;
@@ -3120,10 +3135,19 @@ public class YunPlgun : IBotPlugin /* or ICorePlugin */
         {
             WangYiYunAPI_Address = MyIni.Configs["YunBot"].Get("WangYiYunAPI_Address");
         }
+        if (UNM_Address_temp == "")
+        {
+            UNM_Address = "";
+        }
+        else
+        {
+            UNM_Address = MyIni.Configs["YunBot"].Get("UNM_Address");
+        }
         Console.WriteLine("Yun Plugin loaded");
         Console.WriteLine(playMode);
         Console.WriteLine(cookies1);
         Console.WriteLine(WangYiYunAPI_Address);
+        Console.WriteLine(UNM_Address);
     }
 
     public PlayManager GetplayManager()
@@ -3328,7 +3352,7 @@ public class YunPlgun : IBotPlugin /* or ICorePlugin */
         Console.WriteLine(firstmusicid);
         await MainCommands.CommandPlay(playManager, invoker, musicurl);
         _ = ts3Client.SendChannelMessage("正在播放音乐：" + getMusicName(firstmusicid));
-        return ("开始播放歌单");
+        return "开始播放歌单";
     }
 
     [Command("yun gedan")]
@@ -3374,7 +3398,7 @@ public class YunPlgun : IBotPlugin /* or ICorePlugin */
         Console.WriteLine(firstmusicid);
         await MainCommands.CommandPlay(playManager, invoker, musicurl);
         _ = ts3Client.SendChannelMessage("正在播放音乐：" + getMusicName(firstmusicid));
-        return ("开始播放歌单");
+        return "开始播放歌单";
     }
 
     [Command("yun play")]
@@ -3406,7 +3430,7 @@ public class YunPlgun : IBotPlugin /* or ICorePlugin */
             string result = "正在播放音乐：" + firstmusicname;
             return (result);
         }
-        return ("发生未知错误");
+        return "发生未知错误";
     }
 
     [Command("yun playid")]
@@ -3431,7 +3455,7 @@ public class YunPlgun : IBotPlugin /* or ICorePlugin */
             string result = "正在播放音乐id为：" + arguments.ToString();
             return (result);
         }
-        return ("发生未知错误");
+        return "发生未知错误";
     }
 
     [Command("yun add")]
@@ -3463,7 +3487,7 @@ public class YunPlgun : IBotPlugin /* or ICorePlugin */
             string result = "以下音乐已经添加到播放列表中：" + firstmusicname;
             return (result);
         }
-        return ("发生未知错误");
+        return "发生未知错误";
     }
 
     [Command("yun addid")]
@@ -3488,7 +3512,7 @@ public class YunPlgun : IBotPlugin /* or ICorePlugin */
             string result = "以下id的音乐已经添加到播放列表中：" + arguments.ToString();
             return (result);
         }
-        return ("发生未知错误");
+        return "发生未知错误";
     }
 
     [Command("yun next")]
@@ -3502,7 +3526,7 @@ public class YunPlgun : IBotPlugin /* or ICorePlugin */
             await playManager.Stop();
             if (SongQueue.Count == 0)
             {
-                return ("播放列表为空");
+                return "播放列表为空";
             }
 
             if (playMode == 2 || playMode == 3)
