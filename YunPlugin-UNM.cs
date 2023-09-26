@@ -3069,7 +3069,7 @@ public class MusicDetail
     public int code;
 }
 
-public class YunPlgun : IBotPlugin /* or ICorePlugin */
+public class YunPlugin : IBotPlugin /* or ICorePlugin */
 {
     static IConfigSource MyIni;
     PlayManager tempplayManager;
