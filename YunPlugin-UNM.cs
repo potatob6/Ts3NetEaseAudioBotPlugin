@@ -4,11 +4,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Numerics;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using System.Threading;
@@ -20,7 +17,6 @@ using TS3AudioBot.CommandSystem;
 using TS3AudioBot.Playlists;
 using TS3AudioBot.Plugins;
 using TS3AudioBot.ResourceFactories;
-using TS3AudioBot.Sessions;
 using TSLib.Full;
 //{ get; set; }
 public class ArtistsItem
@@ -28,11 +24,11 @@ public class ArtistsItem
     /// <summary>
     /// 
     /// </summary>
-    public long id;
+    public long id { get; set; }
     /// <summary>
     /// 
     /// </summary>
-    public string name;
+    public string name { get; set; }
     /// <summary>
     /// 
     /// </summary>
@@ -164,7 +160,7 @@ public class SongsItem
     /// <summary>
     /// 
     /// </summary>
-    public List<ArtistsItem> artists;
+    public List<ArtistsItem> artists { get; set; }
     /// <summary>
     /// 
     /// </summary>
@@ -870,7 +866,6 @@ public class GeDan
     /// </summary>
     public long code;
 }
-
 
 public class Creator
 {
@@ -1628,8 +1623,6 @@ public class Status1
     public string cookie { get; set; }
 }
 
-
-//如果好用，请收藏地址，帮忙分享。
 public class SubscribersItem
 {
     /// <summary>
@@ -2563,17 +2556,16 @@ public class GedanDetail
     public string songFromUsers;
 }
 
-
-public class musicCheck
+public class MusicCheck
 {
     /// <summary>
     /// 
     /// </summary>
-    public bool success;
+    public bool success{ get; set; }
     /// <summary>
     /// 
     /// </summary>
-    public string message;
+    public string message{ get; set; }
 }
 
 public class ArItem1
@@ -3085,65 +3077,48 @@ public class YunPlugin : IBotPlugin /* or ICorePlugin */
     public static string UNM_Address;
     public void Initialize()
     {
+        string iniFilePath;
+
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
-            MyIni = new IniConfigSource("plugins/YunSettings.ini"); // Windows 文件目录
+            Console.WriteLine("运行在Windows环境.");
+            iniFilePath = "plugins/YunSettings.ini"; // Windows 文件目录
         }
         else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
         {
-            string filePath = "/.dockerenv";// 判断是否为Docker版，Docker和Linux路径不一样。
-            if (File.Exists(filePath))
+            string dockerEnvFilePath = "/.dockerenv";
+
+            if (File.Exists(dockerEnvFilePath))
             {
                 Console.WriteLine("运行在Docker环境.");
-                string Location = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-                Console.WriteLine(Location);
-                MyIni = new IniConfigSource(Location + "/data/plugins/YunSettings.ini"); // Linux 文件目录
             }
             else
             {
-            Console.WriteLine("运行在Linux环境.");
-            string Location = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-            Console.WriteLine(Location);
-            MyIni = new IniConfigSource(Location + "/plugins/YunSettings.ini"); // Linux 文件目录
+                Console.WriteLine("运行在Linux环境.");
             }
-        }
-        var playMode_temp = MyIni.Configs["YunBot"].Get("playMode");
-        var cookies1_temp = MyIni.Configs["YunBot"].Get("cookies1").Split('"')[0];
-        var WangYiYunAPI_Address_temp = MyIni.Configs["YunBot"].Get("WangYiYunAPI_Address");
-        var UNM_Address_temp = MyIni.Configs["YunBot"].Get("UNM_Address");
-        if (playMode_temp == "")
-        {
-            playMode = 0;
+
+            string location = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+            iniFilePath = File.Exists(dockerEnvFilePath) ? location + "/data/plugins/YunSettings.ini" : location + "/plugins/YunSettings.ini";
         }
         else
         {
-            playMode = MyIni.Configs["YunBot"].GetInt("playMode");
+            throw new NotSupportedException("不支持的操作系统");
         }
-        if (cookies1_temp == "")
-        {
-            cookies1 = "";
-        }
-        else
-        {
-            cookies1 = MyIni.Configs["YunBot"].Get("cookies1").Split('"')[0];
-        }
-        if (WangYiYunAPI_Address_temp == "")
-        {
-            WangYiYunAPI_Address = "http://127.0.0.1:3000";
-        }
-        else
-        {
-            WangYiYunAPI_Address = MyIni.Configs["YunBot"].Get("WangYiYunAPI_Address");
-        }
-        if (UNM_Address_temp == "")
-        {
-            UNM_Address = "";
-        }
-        else
-        {
-            UNM_Address = MyIni.Configs["YunBot"].Get("UNM_Address");
-        }
-        Console.WriteLine("Yun Plugin loaded");
+
+        Console.WriteLine(iniFilePath);
+        MyIni = new IniConfigSource(iniFilePath);
+
+        playMode = int.TryParse(MyIni.Configs["YunBot"].Get("playMode"), out int playModeValue) ? playModeValue : 0;
+
+        string cookies1Value = MyIni.Configs["YunBot"].Get("cookies1");
+        cookies1 = string.IsNullOrEmpty(cookies1Value) ? "" : cookies1Value;
+
+        string wangYiYunAPI_AddressValue = MyIni.Configs["YunBot"].Get("WangYiYunAPI_Address");
+        WangYiYunAPI_Address = string.IsNullOrEmpty(wangYiYunAPI_AddressValue) ? "http://127.0.0.1:3000" : wangYiYunAPI_AddressValue;
+
+        string unmAddressValue = MyIni.Configs["YunBot"].Get("UNM_Address");
+        UNM_Address = string.IsNullOrEmpty(unmAddressValue) ? "" : unmAddressValue;
+
         Console.WriteLine(playMode);
         Console.WriteLine(cookies1);
         Console.WriteLine(WangYiYunAPI_Address);
@@ -3152,31 +3127,31 @@ public class YunPlugin : IBotPlugin /* or ICorePlugin */
 
     public PlayManager GetplayManager()
     {
-        return this.tempplayManager;
+        return tempplayManager;
     }
 
     public void SetPlplayManager(PlayManager playManager)
     {
-        this.tempplayManager = playManager;
+        tempplayManager = playManager;
     }
     public InvokerData Getinvoker()
     {
-        return this.tempinvoker;
+        return tempinvoker;
     }
 
     public void SetInvoker(InvokerData invoker)
     {
-        this.tempinvoker = invoker;
+        tempinvoker = invoker;
     }
 
     public void SetTs3Client(Ts3Client ts3Client)
     {
-        this.tempts3Client = ts3Client;
+        tempts3Client = ts3Client;
     }
 
     public Ts3Client GetTs3Client()
     {
-        return this.tempts3Client;
+        return tempts3Client;
     }
 
     public async Task AudioService_Playstoped(object sender, EventArgs e) //当上一首音乐播放完触发
@@ -3284,33 +3259,24 @@ public class YunPlugin : IBotPlugin /* or ICorePlugin */
     [Command("yun mode")]
     public string playmode(int mode)
     {
-        playMode = mode;
-        MyIni.Configs["YunBot"].Set("playMode",mode.ToString());
-        MyIni.Save();
-        if (mode == 0)
+        if (mode >= 0 && mode <= 3)
         {
-            return "当前播放模式为顺序播放";
+            playMode = mode;
+            MyIni.Configs["YunBot"].Set("playMode",mode.ToString());
+            MyIni.Save();
+            return mode switch
+            {
+                0 => "顺序播放",
+                1 => "顺序循环",
+                2 => "随机播放",
+                3 => "随机循环",
+                _ => "未知播放模式",
+            };
         }
-
-        else if (mode == 1)
-        {
-            return "当前播放模式为顺序循环";
-        }
-
-        else if (mode == 2)
-        {
-            return "当前播放模式为随机播放";
-        }
-
-        else if (mode == 3)
-        {
-            return "当前播放模式为随机循环";
-        }
-
         else
         {
-            return "请输入正确的播放模式";
-        }
+            return "请输入正确的播放模式(0 到 3 之间的整数)";
+        }   
     }
 
     [Command("yun gedanid")]
@@ -3404,32 +3370,109 @@ public class YunPlugin : IBotPlugin /* or ICorePlugin */
     [Command("yun play")]
     public string CommandYunPlay(string arguments, PlayManager playManager, InvokerData invoker, Ts3Client ts3Client)
     {
+        long firstmusicid;
+        string firstmusicname;
+        string musicurl;
+        string musicdetailurl;
+        string musicdetailjson;
+        string musicimgurl;
+        string musicname;
+        string musicCheckurl;
+        string songName;
+        string artist = "";
+        MusicCheck musicCheckjson;
+        string SearchmusicCheckjson;
+        MusicDetail musicDetail;
         SetInvoker(invoker);
         SetPlplayManager(playManager);
         SetTs3Client(ts3Client);
-        string urlSearch = WangYiYunAPI_Address + "/search?keywords=" + arguments + "&limit=1";
+        string urlSearch = WangYiYunAPI_Address + "/search?keywords=" + arguments + "&limit=30";
         string Searchjson = HttpGet(urlSearch);
         yunSearchSong yunSearchSong = JsonSerializer.Deserialize<yunSearchSong>(Searchjson);
-        long firstmusicid = yunSearchSong.result.songs[0].id;
-        string firstmusicname = yunSearchSong.result.songs[0].name;
-        Console.WriteLine(firstmusicid + firstmusicname);
-        string musicurl = getMusicUrl(firstmusicid, true);
-        string musicdetailurl = WangYiYunAPI_Address + "/song/detail?ids=" + firstmusicid.ToString();
-        string musicdetailjson = HttpGet(musicdetailurl);
-        MusicDetail musicDetail = JsonSerializer.Deserialize<MusicDetail>(musicdetailjson);
-        string musicimgurl = musicDetail.songs[0].al.picUrl;
-        string musicname = musicDetail.songs[0].name;
-        MainCommands.CommandBotAvatarSet(ts3Client, musicimgurl);
-        MainCommands.CommandBotDescriptionSet(ts3Client, musicname);
-        Console.WriteLine(musicurl);
-        if (musicurl != "error")
+        string[] splitarguments = arguments.Split(" ");
+        if (splitarguments.Length == 1)
         {
-            MainCommands.CommandPlay(playManager, invoker, musicurl);
-            MainCommands.CommandBotDescriptionSet(ts3Client, firstmusicname);
-            ts3Client.SendChannelMessage("正在播放音乐：" + firstmusicname);
-            string result = "正在播放音乐：" + firstmusicname;
-            return (result);
+            // 单独歌曲名称
+            songName = splitarguments[0];
+            firstmusicid = yunSearchSong.result.songs[0].id;
+            musicCheckurl = WangYiYunAPI_Address + "/check/music?id=" + firstmusicid.ToString();
+            SearchmusicCheckjson = HttpGet(musicCheckurl);
+            musicCheckjson = JsonSerializer.Deserialize<MusicCheck>(SearchmusicCheckjson);
+            Console.WriteLine(musicCheckjson.success.ToString());
+            if (musicCheckjson.success.ToString() == "False")
+            {
+                musicurl = getcheckMusicUrl(firstmusicid, true);
+            }else{
+                musicurl = getMusicUrl(firstmusicid, true);
+            }
+            firstmusicname = yunSearchSong.result.songs[0].name;
+            Console.WriteLine(firstmusicid + firstmusicname);     
+            musicdetailurl = WangYiYunAPI_Address + "/song/detail?ids=" + firstmusicid.ToString();
+            musicdetailjson = HttpGet(musicdetailurl);
+            musicDetail = JsonSerializer.Deserialize<MusicDetail>(musicdetailjson);
+            musicimgurl = musicDetail.songs[0].al.picUrl;
+            musicname = musicDetail.songs[0].name;
+            MainCommands.CommandBotAvatarSet(ts3Client, musicimgurl);
+            MainCommands.CommandBotDescriptionSet(ts3Client, musicname);
+            Console.WriteLine(musicurl);
+            if (musicurl != "error")
+            {
+                MainCommands.CommandPlay(playManager, invoker, musicurl);
+                MainCommands.CommandBotDescriptionSet(ts3Client, firstmusicname);
+                ts3Client.SendChannelMessage("正在播放音乐：" + firstmusicname);
+                return "正在播放音乐：" + firstmusicname;
+            }
         }
+        else if (splitarguments.Length == 2)
+        {
+            // 歌曲名称和歌手
+            songName = splitarguments[0];
+            artist = splitarguments[1];
+            for (int s = 0; s <= 30; s++)
+            {
+                Console.WriteLine(yunSearchSong.result.songs[s].name.ToString() + "|" + yunSearchSong.result.songs[s].artists[0].name.ToString() + "|" + yunSearchSong.result.songs[0].id);
+                if (yunSearchSong.result.songs[s].name.ToString() == songName && yunSearchSong.result.songs[s].artists[0].name.ToString() == artist)
+                {
+                    
+                    firstmusicid = yunSearchSong.result.songs[s].id;
+                    musicCheckurl = WangYiYunAPI_Address + "/check/music?id=" + firstmusicid.ToString();
+                    SearchmusicCheckjson = HttpGet(musicCheckurl);
+                    musicCheckjson = JsonSerializer.Deserialize<MusicCheck>(SearchmusicCheckjson);
+                    Console.WriteLine(musicCheckjson.success.ToString());
+                    if (musicCheckjson.success.ToString() == "False")
+                    {
+                        musicurl = getcheckMusicUrl(firstmusicid, true);
+                    }else{
+                        musicurl = getMusicUrl(firstmusicid, true);
+                    }
+                    firstmusicname = yunSearchSong.result.songs[s].name;
+                    Console.WriteLine(firstmusicid + firstmusicname);     
+                    musicdetailurl = WangYiYunAPI_Address + "/song/detail?ids=" + firstmusicid.ToString();
+                    musicdetailjson = HttpGet(musicdetailurl);
+                    musicDetail = JsonSerializer.Deserialize<MusicDetail>(musicdetailjson);
+                    musicimgurl = musicDetail.songs[0].al.picUrl;
+                    musicname = musicDetail.songs[0].name;
+                    MainCommands.CommandBotAvatarSet(ts3Client, musicimgurl);
+                    MainCommands.CommandBotDescriptionSet(ts3Client, musicname);
+                    Console.WriteLine(musicurl);
+                    if (musicurl != "error")
+                    {
+                        MainCommands.CommandPlay(playManager, invoker, musicurl);
+                        MainCommands.CommandBotDescriptionSet(ts3Client, firstmusicname);
+                        ts3Client.SendChannelMessage("正在播放音乐：" + firstmusicname);
+                        return "正在播放音乐：" + firstmusicname;
+                    }
+                }
+            }
+        }
+        else
+        {
+            // 输入为空或格式不符合预期
+            Console.WriteLine("请输入有效的歌曲信息");
+            return "请输入有效的歌曲信息";
+        }
+        Console.WriteLine(songName + "|" + artist);
+        // Console.WriteLine(yunSearchSong.result.songs[0].artists[0].name.ToString());
         return "发生未知错误";
     }
 
@@ -3620,7 +3663,7 @@ public class YunPlugin : IBotPlugin /* or ICorePlugin */
         }
         await tsClient.DeleteAvatar();
         changeCookies(cookies1);
-        MyIni.Configs["YunBot"].Set("cookies1", @"""" + cookies1 + @"""");
+        MyIni.Configs["YunBot"].Set("cookies1",$"\"{cookies1}\"");
         MyIni.Save();
         return result;
     }
@@ -3644,7 +3687,18 @@ public class YunPlugin : IBotPlugin /* or ICorePlugin */
         string mp3 = musicurl.data[0].url;
         return mp3;
     }
-
+    public static string getcheckMusicUrl(long id, bool usingcookie = false) //获得无版权歌曲URL
+    {
+        string cookie = getCookies();
+        string url;
+        url = WangYiYunAPI_Address + "/song/url?id=" + id.ToString() + "&proxy=" + UNM_Address;
+        string musicurljson = HttpGet(url);
+        musicURL musicurl = JsonSerializer.Deserialize<musicURL>(musicurljson);
+        long code = musicurl.code;
+        string mp3 = musicurl.data[0].url.ToString();
+        string checkmp3 = mp3.Replace("http://music.163.com",UNM_Address);
+        return checkmp3;
+    }
     public static string getMusicUrl(string id, bool usingcookie = false)//获得歌曲URL
     {
         string cookie = getCookies();
