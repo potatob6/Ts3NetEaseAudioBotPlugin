@@ -33,6 +33,7 @@ public class YunPlugin : IBotPlugin
     public static string UNM_Address;
     List<long> playlist = new List<long>();
     public static int Playlocation = 0;
+
     public void Initialize()
     {
         string iniFilePath;
@@ -81,6 +82,7 @@ public class YunPlugin : IBotPlugin
         Console.WriteLine(cookies);
         Console.WriteLine(WangYiYunAPI_Address);
         Console.WriteLine(UNM_Address);
+        
     }
     public void SetPlplayManager(PlayManager playManager)
     {
@@ -143,10 +145,11 @@ public class YunPlugin : IBotPlugin
     [Command("yun play")]
     public async Task<string> CommandYunPlay(string arguments, PlayManager playManager, InvokerData invoker, Ts3Client ts3Client)
     {
+        playManager.ResourceStopped -= async (sender, e) => await SongPlayMode(playManager, invoker, ts3Client);
         SetInvoker(invoker);
         SetPlplayManager(playManager);
         SetTs3Client(ts3Client);
-
+        
         string urlSearch = $"{WangYiYunAPI_Address}/search?keywords={arguments}&limit=30";
         string searchJson = await HttpGetAsync(urlSearch);
         yunSearchSong yunSearchSong = JsonSerializer.Deserialize<yunSearchSong>(searchJson);
@@ -164,8 +167,7 @@ public class YunPlugin : IBotPlugin
             {
                 if (yunSearchSong.result.songs[s].name == songName)
                 {
-                    ProcessSong(yunSearchSong.result.songs[s].id, ts3Client, playManager, invoker);
-                    return $"正在播放音乐：{yunSearchSong.result.songs[s].name}";
+                    _ = ProcessSong(yunSearchSong.result.songs[s].id, ts3Client, playManager, invoker);
                 }
             }
         }
@@ -179,8 +181,7 @@ public class YunPlugin : IBotPlugin
             {
                 if (yunSearchSong.result.songs[s].name == songName && yunSearchSong.result.songs[s].artists[0].name == artist)
                 {
-                    ProcessSong(yunSearchSong.result.songs[s].id, ts3Client, playManager, invoker);
-                    return $"正在播放音乐：{yunSearchSong.result.songs[s].name}";
+                    _ = ProcessSong(yunSearchSong.result.songs[s].id, ts3Client, playManager, invoker);
                 }
             }
         }
@@ -200,7 +201,7 @@ public class YunPlugin : IBotPlugin
 
     //===========================================歌单播放===========================================
     [Command("yun gedan")]
-    public async Task<string> CommandYunGedan(string arguments, PlayManager playManager, InvokerData invoker, Ts3Client ts3Client)
+    public async Task<string> CommandYunGedan(string arguments, PlayManager playManager, InvokerData invoker, Ts3Client ts3Client, Player player)
     {
         playlist.Clear();
         SetInvoker(invoker);
@@ -239,13 +240,9 @@ public class YunPlugin : IBotPlugin
                 Console.WriteLine(geDan.songs[j].id);
             }
         }
-        SongPlayMode(playManager,invoker,ts3Client);
-        playManager.PlaybackStopped += async (song, stopReason) =>
-        {
-            SongPlayMode(playManager,invoker,ts3Client);
-            await Task.CompletedTask;
-        };
         Playlocation = 0;
+        _ = ProcessSong(playlist[0], ts3Client, playManager, invoker);
+        //playManager.ResourceStopped += async (sender, e) => await SongPlayMode(playManager, invoker, ts3Client);
         Console.WriteLine($"歌单共{playlist.Count}首歌");
         return $"播放列表加载完成,已加载{playlist.Count}首歌";
     }
@@ -253,15 +250,14 @@ public class YunPlugin : IBotPlugin
 
     //===========================================下一曲===========================================
     [Command("yun next")]
-    public Task<string> CommandYunNext(PlayManager playManager, InvokerData invoker, Ts3Client ts3Client)
+    public async Task CommandYunNext(PlayManager playManager, InvokerData invoker, Ts3Client ts3Client)
     {
-        SongPlayMode(playManager,invoker,ts3Client);
-        return Task.FromResult($"");
+        await SongPlayMode(playManager, invoker, ts3Client);
     }
     //===========================================下一曲=============================================
 
     //===========================================播放逻辑===========================================
-    private void SongPlayMode(PlayManager playManager, InvokerData invoker, Ts3Client ts3Client)
+    private async Task SongPlayMode(PlayManager playManager, InvokerData invoker, Ts3Client ts3Client)
     {
         try
         {
@@ -269,34 +265,29 @@ public class YunPlugin : IBotPlugin
             {
                 case 0: //顺序播放
                     Playlocation += 1;
-                    ProcessSong(playlist[Playlocation], ts3Client, playManager, invoker);
-                    Console.WriteLine($"正在播放第{Playlocation + 1}首歌");
+                    await ProcessSong(playlist[Playlocation], ts3Client, playManager, invoker);
                     break;
                 case 1:  //顺序循环
                     if (Playlocation == playlist.Count - 1)
                     {
                         Playlocation = 0;
-                        ProcessSong(playlist[Playlocation], ts3Client, playManager, invoker);
-                        Console.WriteLine($"正在播放第{Playlocation + 1}首歌");
+                        await ProcessSong(playlist[Playlocation], ts3Client, playManager, invoker);
                     }
                     else
                     {
                         Playlocation += 1;
-                        ProcessSong(playlist[Playlocation], ts3Client, playManager, invoker);
-                        Console.WriteLine($"正在播放第{Playlocation + 1}首歌");
+                        await ProcessSong(playlist[Playlocation], ts3Client, playManager, invoker);
                     }
                     break;
                 case 2:  //随机播放
                     Random random = new Random();
                     Playlocation = random.Next(0, playlist.Count);
-                    ProcessSong(playlist[Playlocation], ts3Client, playManager, invoker);
-                    Console.WriteLine($"正在播放第{Playlocation + 1}首歌");
+                    await ProcessSong(playlist[Playlocation], ts3Client, playManager, invoker);
                     break;
                 case 3:  //随机循环
                     Random random1 = new Random();
                     Playlocation = random1.Next(0, playlist.Count);
-                    ProcessSong(playlist[Playlocation], ts3Client, playManager, invoker);
-                    Console.WriteLine($"正在播放第{Playlocation + 1}首歌");
+                    await ProcessSong(playlist[Playlocation], ts3Client, playManager, invoker);
                     break;
                 default:
                     break;
@@ -308,7 +299,7 @@ public class YunPlugin : IBotPlugin
             _ = ts3Client.SendChannelMessage("播放列表已空");
         }
     }
-    private async void ProcessSong(long id, Ts3Client ts3Client, PlayManager playManager, InvokerData invoker)
+    private async Task ProcessSong(long id, Ts3Client ts3Client, PlayManager playManager, InvokerData invoker)
     {
         long musicId = id;
         string musicCheckUrl = $"{WangYiYunAPI_Address}/check/music?id={musicId}";
@@ -404,7 +395,7 @@ public class YunPlugin : IBotPlugin
         _ = await tsClient.DeleteAvatar();
 
         // 更新 cookies 到配置文件
-        MyIni.Configs["YunBot"].Set("cookies", $"\"{cookies}\"");
+        MyIni.Configs["YunBot"].Set("cookies1", $"\"{cookies}\"");
         MyIni.Save();
 
         return result;
@@ -523,6 +514,6 @@ public class YunPlugin : IBotPlugin
     //===============================================HTTP相关===============================================
     public void Dispose()
     {
-        playlist.Clear();
+
     }
 }
