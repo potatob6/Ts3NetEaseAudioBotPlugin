@@ -1,6 +1,6 @@
 # TS3AudioBot-NetEaseCloudmusic-plugin
 在[ZHANGTIANYAO1/TS3AudioBot-NetEaseCloudmusic-plugin](https://github.com/ZHANGTIANYAO1/TS3AudioBot-NetEaseCloudmusic-plugin)的基础上兼容Linux.
-支持版权歌曲解锁（只初步实现`!yun play 歌曲 歌手`, 比如 `青花瓷 周杰伦`）。  
+支持版权歌曲解锁。  
 使用 [Nini](https://github.com/bmatzelle/nini) 实现ini文件的操作。  
 使用 [Costura.Fody](https://github.com/Fody/Costura/) 打包。  
 
@@ -24,29 +24,15 @@ vip音乐想要先登陆才能播放完整版本:（输入指令后扫描机器�
 1.立即播放网易云音乐  
 `!yun play 音乐名称` 或 `!yun play 音乐名称 歌手` (无版权歌曲搜索)  
   
-2.添加音乐到下一首  
-`!yun add 音乐名称`  
-  
-3.播放网易云音乐歌单(如果提示Error: Nothing to play...重新输入指令解决)  
-`!yun gedan 歌单名称`  
-  
-4.播放网易云音乐歌单id  
-`!yun gedanid 歌单名称`  
-  
-5.立即播放网易云音乐id  
-`!yun playid 歌单id`  
-  
-6.添加指定音乐id到下一首  
-`!yun add 音乐id`  
-  
-7.播放列表中的下一首    
+2.播放网易云音乐歌单 
+`!yun gedan 歌单id`  
+
+3.播放列表中的下一首    
 `!yun next`  
 
-8.修改播放模式    
+4.修改播放模式    
 `!yun mode 数字0-3`
 `0 = 顺序播放`
 `1 = 顺序循环`
 `2 = 随机播放`
 `3 = 随机循环`
-
-需要注意的是如果歌单歌曲过多需要时间加载，期间一定一定不要输入其他指令  
