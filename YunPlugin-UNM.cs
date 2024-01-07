@@ -18,3063 +18,21 @@ using TS3AudioBot.Playlists;
 using TS3AudioBot.Plugins;
 using TS3AudioBot.ResourceFactories;
 using TSLib.Full;
-//{ get; set; }
-public class ArtistsItem
+using NeteaseCloudMusicApi;
+
+public class YunPlugin : IBotPlugin 
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    public long id { get; set; }
-    /// <summary>
-    /// 
-    /// </summary>
-    public string name { get; set; }
-    /// <summary>
-    /// 
-    /// </summary>
-    public string picUrl;
-    /// <summary>
-    /// 
-    /// </summary>
-    public List<string> @alias;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long albumSize;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long picId;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string fansGroup;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string img1v1Url;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long img1v1;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string trans;
-}
-
-public class Artist
-{
-    /// <summary>
-    /// 
-    /// </summary>
-    public long id;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string name;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string picUrl;
-    /// <summary>
-    /// 
-    /// </summary>
-    public List<string> @alias;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long albumSize;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long picId;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string fansGroup;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string img1v1Url;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long img1v1;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string trans;
-}
-
-public class Album
-{
-    /// <summary>
-    /// 
-    /// </summary>
-    public long id;
-    /// <summary>
-    /// 海阔天空
-    /// </summary>
-    public string name;
-    /// <summary>
-    /// 
-    /// </summary>
-    public Artist artist;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long publishTime;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long size;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long copyrightId;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long status;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long picId;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long mark;
-}
-
-public class SongsItem
-{
-    /// <summary>
-    /// 
-    /// </summary>
-    public long id { get; set; }
-    /// <summary>
-    /// 海阔天空
-    /// </summary>
-    public string name { get; set; }
-    /// <summary>
-    /// 
-    /// </summary>
-    public List<ArtistsItem> artists { get; set; }
-    /// <summary>
-    /// 
-    /// </summary>
-    public Album album;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long duration;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long copyrightId;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long status;
-    /// <summary>
-    /// 
-    /// </summary>
-    public List<string> @alias;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long rtype;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long ftype;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long mvid;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long fee;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string rUrl;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long mark;
-}
-
-public class Result
-{
-    /// <summary>
-    /// 
-    /// </summary>
-    public List<SongsItem> songs { get; set; }
-    /// <summary>
-    /// 
-    /// </summary>
-    public bool hasMore;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long songCount;
-}
-
-public class yunSearchSong
-{
-    /// <summary>
-    /// 
-    /// </summary>
-    public Result result { get; set; }
-    /// <summary>
-    /// 
-    /// </summary>
-    public long code;
-}
-
-public class FreeTrialInfo
-{
-    /// <summary>
-    /// 
-    /// </summary>
-    public long start;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long end;
-}
-
-public class FreeTrialPrivilege
-{
-    /// <summary>
-    /// 
-    /// </summary>
-    public bool resConsumable;
-    /// <summary>
-    /// 
-    /// </summary>
-    public bool userConsumable;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string listenType;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string cannotListenReason;
-}
-
-public class FreeTimeTrialPrivilege
-{
-    /// <summary>
-    /// 
-    /// </summary>
-    public bool resConsumable;
-    /// <summary>
-    /// 
-    /// </summary>
-    public bool userConsumable;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long type;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long remalongime;
-}
-
-public class DataItem
-{
-    /// <summary>
-    /// 
-    /// </summary>
-    public long id;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string url { get; set; }
-    /// <summary>
-    /// 
-    /// </summary>
-    public long br;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long size;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string md5;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long code;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long expi;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string type;
-    /// <summary>
-    /// 
-    /// </summary>
-    public double gain;
-    /// <summary>
-    /// 
-    /// </summary>
-    public double peak;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long fee;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string uf;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long payed;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long flag;
-    /// <summary>
-    /// 
-    /// </summary>
-    public bool canExtend;
-    /// <summary>
-    /// 
-    /// </summary>
-    public FreeTrialInfo freeTrialInfo;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string level;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string encodeType;
-    /// <summary>
-    /// 
-    /// </summary>
-    public FreeTrialPrivilege freeTrialPrivilege;
-    /// <summary>
-    /// 
-    /// </summary>
-    public FreeTimeTrialPrivilege freeTimeTrialPrivilege;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long urlSource;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long rightSource;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string podcastCtrp;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string effectTypes;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long time;
-}
-
-public class musicURL
-{
-    /// <summary>
-    /// 
-    /// </summary>
-    public List<DataItem> data { get; set; }
-    /// <summary>
-    /// 
-    /// </summary>
-    public long code { get; set; }
-}
-
-public class ArItem
-{
-    /// <summary>
-    /// 
-    /// </summary>
-    public long id;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string name;
-    /// <summary>
-    /// 
-    /// </summary>
-    public List<string> tns;
-    /// <summary>
-    /// 
-    /// </summary>
-    public List<string> @alias;
-}
-
-public class Al
-{
-    /// <summary>
-    /// 
-    /// </summary>
-    public long id;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string name;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string picUrl;
-    /// <summary>
-    /// 
-    /// </summary>
-    public List<string> tns;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long pic;
-}
-
-public class H
-{
-    /// <summary>
-    /// 
-    /// </summary>
-    public long br;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long fid;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long size;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long vd;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long sr;
-}
-
-public class M
-{
-    /// <summary>
-    /// 
-    /// </summary>
-    public long br;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long fid;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long size;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long vd;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long sr;
-}
-
-public class L
-{
-    /// <summary>
-    /// 
-    /// </summary>
-    public long br;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long fid;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long size;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long vd;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long sr;
-}
-
-public class SongsItems
-{
-    /// <summary>
-    /// 
-    /// </summary>
-    public string name { get; set; }
-    /// <summary>
-    /// 
-    /// </summary>
-    public long id { get; set; }
-    /// <summary>
-    /// 
-    /// </summary>
-    public long pst;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long t;
-    /// <summary>
-    /// 
-    /// </summary>
-    public List<ArItem> ar;
-    /// <summary>
-    /// 
-    /// </summary>
-    public List<string> alia;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long pop;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long st;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string rt;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long fee;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long v;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string crbt;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string cf;
-    /// <summary>
-    /// 
-    /// </summary>
-    public Al al;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long dt;
-    /// <summary>
-    /// 
-    /// </summary>
-    public H h;
-    /// <summary>
-    /// 
-    /// </summary>
-    public M m;
-    /// <summary>
-    /// 
-    /// </summary>
-    public L l;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string sq;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string hr;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string a;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string cd;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long no;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string rtUrl;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long ftype;
-    /// <summary>
-    /// 
-    /// </summary>
-    public List<string> rtUrls;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long djId;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long copyright;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long s_id;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long mark;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long originCoverType;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string originSongSimpleData;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string tagPicList;
-    /// <summary>
-    /// 
-    /// </summary>
-    public bool resourceState;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long version;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string songJumpInfo;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string entertainmentTags;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string awardTags;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long single;
-    /// <summary>
-    /// 
-    /// </summary>
-    public bool noCopyrightRcmd;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long mst;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long cp;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long rtype;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string rurl;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long mv;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long publishTime;
-}
-
-public class FreeTrial
-{
-    /// <summary>
-    /// 
-    /// </summary>
-    public bool resConsumable;
-    /// <summary>
-    /// 
-    /// </summary>
-    public bool userConsumable;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string listenType;
-}
-
-public class ChargeInfoListItem
-{
-    /// <summary>
-    /// 
-    /// </summary>
-    public long rate;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string chargeUrl;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string chargeMessage;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long chargeType;
-}
-
-public class PrivilegesItem
-{
-    /// <summary>
-    /// 
-    /// </summary>
-    public long id;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long fee;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long payed;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long st;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long pl;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long dl;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long sp;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long cp;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long subp;
-    /// <summary>
-    /// 
-    /// </summary>
-    public bool cs;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long maxbr;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long fl;
-    /// <summary>
-    /// 
-    /// </summary>
-    public bool toast;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long flag;
-    /// <summary>
-    /// 
-    /// </summary>
-    public bool preSell;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long playMaxbr;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long downloadMaxbr;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string maxBrLevel;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string playMaxBrLevel;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string downloadMaxBrLevel;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string plLevel;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string dlLevel;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string flLevel;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string rscl;
-    /// <summary>
-    /// 
-    /// </summary>
-    public FreeTrial freeTrialPrivilege;
-    /// <summary>
-    /// 
-    /// </summary>
-    public List<ChargeInfoListItem> chargeInfoList;
-}
-
-public class GeDan
-{
-    /// <summary>
-    /// 
-    /// </summary>
-    public List<SongsItems> songs { get; set; }
-    /// <summary>
-    /// 
-    /// </summary>
-    public List<PrivilegesItem> privileges;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long code;
-}
-
-public class Creator
-{
-    /// <summary>
-    /// 淋雨丶伞
-    /// </summary>
-    public string nickname;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long userId;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long userType;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string avatarUrl;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long authStatus;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string expertTags;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string experts;
-}
-
-public class ArtistsItems
-{
-    /// <summary>
-    /// 
-    /// </summary>
-    public string name;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long id;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long picId;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long img1v1Id;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string briefDesc;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string picUrl;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string img1v1Url;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long albumSize;
-    /// <summary>
-    /// 
-    /// </summary>
-    public List<string> @alias;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string trans;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long musicSize;
-}
-
-public class Artists
-{
-    /// <summary>
-    /// 
-    /// </summary>
-    public string name;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long id;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long picId;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long img1v1Id;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string briefDesc;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string picUrl;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string img1v1Url;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long albumSize;
-    /// <summary>
-    /// 
-    /// </summary>
-    public List<string> @alias;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string trans;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long musicSize;
-}
-
-public class ArtistsItemss
-{
-    /// <summary>
-    /// 
-    /// </summary>
-    public string name;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long id;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long picId;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long img1v1Id;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string briefDesc;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string picUrl;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string img1v1Url;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long albumSize;
-    /// <summary>
-    /// 
-    /// </summary>
-    public List<string> @alias;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string trans;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long musicSize;
-}
-
-public class Albums
-{
-    /// <summary>
-    /// 
-    /// </summary>
-    public string name;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long id;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string idStr;
-    /// <summary>
-    /// 专辑
-    /// </summary>
-    public string type;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long size;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long picId;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string blurPicUrl;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long companyId;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long pic;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string picUrl;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long publishTime;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string description;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string tags;
-    /// <summary>
-    /// 独立发行
-    /// </summary>
-    public string company;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string briefDesc;
-    /// <summary>
-    /// 
-    /// </summary>
-    public Artist artist;
-    /// <summary>
-    /// 
-    /// </summary>
-    public List<string> songs;
-    /// <summary>
-    /// 
-    /// </summary>
-    public List<string> @alias;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long status;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long copyrightId;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string commentThreadId;
-    /// <summary>
-    /// 
-    /// </summary>
-    public List<ArtistsItemss> artists;
-}
-
-public class BMusic
-{
-    /// <summary>
-    /// 
-    /// </summary>
-    public string name;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long id;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long size;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string extension;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long sr;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long dfsId;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long bitrate;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long playTime;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long volumeDelta;
-}
-
-public class HMusic
-{
-    /// <summary>
-    /// 
-    /// </summary>
-    public string name;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long id;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long size;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string extension;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long sr;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long dfsId;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long bitrate;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long playTime;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long volumeDelta;
-}
-
-public class MMusic
-{
-    /// <summary>
-    /// 
-    /// </summary>
-    public string name;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long id;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long size;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string extension;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long sr;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long dfsId;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long bitrate;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long playTime;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long volumeDelta;
-}
-
-public class LMusic
-{
-    /// <summary>
-    /// 
-    /// </summary>
-    public string name;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long id;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long size;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string extension;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long sr;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long dfsId;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long bitrate;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long playTime;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long volumeDelta;
-}
-
-public class Track
-{
-    /// <summary>
-    /// 
-    /// </summary>
-    public string name;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long id;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long position;
-    /// <summary>
-    /// 
-    /// </summary>
-    public List<string> @alias;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long status;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long fee;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long copyrightId;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string disc;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long no;
-    /// <summary>
-    /// 
-    /// </summary>
-    public List<ArtistsItemss> artists;
-    /// <summary>
-    /// 
-    /// </summary>
-    public Albums album;
-    /// <summary>
-    /// 
-    /// </summary>
-    public bool starred;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long popularity;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long score;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long starredNum;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long duration;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long playedNum;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long dayPlays;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long hearTime;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string ringtone;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string crbt;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string audition;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string copyFrom;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string commentThreadId;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string rtUrl;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long ftype;
-    /// <summary>
-    /// 
-    /// </summary>
-    public List<string> rtUrls;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long copyright;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long rtype;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string rurl;
-    /// <summary>
-    /// 
-    /// </summary>
-    public BMusic bMusic;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string mp3Url;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long mvid;
-    /// <summary>
-    /// 
-    /// </summary>
-    public HMusic hMusic;
-    /// <summary>
-    /// 
-    /// </summary>
-    public MMusic mMusic;
-    /// <summary>
-    /// 
-    /// </summary>
-    public LMusic lMusic;
-}
-
-public class PlaylistsItem
-{
-    /// <summary>
-    /// 
-    /// </summary>
-    public long id { get; set; }
-    /// <summary>
-    /// 『纯音乐』有些歌只能一个人戴耳机听
-    /// </summary>
-    public string name;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string coverImgUrl;
-    /// <summary>
-    /// 
-    /// </summary>
-    public Creator creator;
-    /// <summary>
-    /// 
-    /// </summary>
-    public bool subscribed;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long trackCount;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long userId;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long playCount;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long bookCount;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long specialType;
-    /// <summary>
-    /// 
-    /// </summary>
-    public List<string> officialTags;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string action;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string actionType;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string recommendText;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string score;
-    /// <summary>
-    /// 平时收集的一些纯音乐做了整理，希望大家喜欢
-    /// </summary>
-    public string description;
-    /// <summary>
-    /// 
-    /// </summary>
-    public bool highQuality;
-    /// <summary>
-    /// 
-    /// </summary>
-    public Track track;
-    /// <summary>
-    /// alg_search_rec_playlist_tab_basic_rewrite_{"hit":"Name","id":"有些歌只能一个人戴耳机听","type":"basic"}
-    /// </summary>
-    public string alg;
-}
-
-public class Results
-{
-    /// <summary>
-    /// 
-    /// </summary>
-    public List<PlaylistsItem> playlists { get; set; }
-    /// <summary>
-    /// 
-    /// </summary>
-    public bool hasMore;
-    /// <summary>
-    /// 
-    /// </summary>
-    public List<string> hlWords;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long playlistCount;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string searchQcReminder;
-}
-
-public class SearchGedan
-{
-    /// <summary>
-    /// 
-    /// </summary>
-    public Results result { get; set; }
-    /// <summary>
-    /// 
-    /// </summary>
-    public long code;
-}
-
-public class Data
-{
-    /// <summary>
-    /// 
-    /// </summary>
-    public int code;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string unikey { get; set; }
-}
-
-public class LoginKey
-{
-    /// <summary>
-    /// 
-    /// </summary>
-    public Data data { get; set; }
-    /// <summary>
-    /// 
-    /// </summary>
-    public int code;
-}
-
-public class Datas
-{
-    /// <summary>
-    /// 
-    /// </summary>
-    public string qrurl;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string qrimg { get; set; }
-}
-
-public class LoginImg
-{
-    /// <summary>
-    /// 
-    /// </summary>
-    public int code;
-    /// <summary>
-    /// 
-    /// </summary>
-    public Datas data { get; set; }
-}
-
-public class Status1
-{
-    /// <summary>
-    /// 
-    /// </summary>
-    public long code { get; set; }
-    /// <summary>
-    /// 等待扫码
-    /// </summary>
-    public string message { get; set; }
-    /// <summary>
-    /// 
-    /// </summary>
-    public string cookie { get; set; }
-}
-
-public class SubscribersItem
-{
-    /// <summary>
-    /// 
-    /// </summary>
-    public string defaultAvatar;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int province;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int authStatus;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string followed;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string avatarUrl;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int accountStatus;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int gender;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int city;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int birthday;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long userId;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int userType;
-    /// <summary>
-    /// 神明懿2104
-    /// </summary>
-    public string nickname;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string signature;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string description;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string detailDescription;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int avatarImgId;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int backgroundImgId;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string backgroundUrl;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int authority;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string mutual;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string expertTags;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string experts;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int djStatus;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int vipType;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string remarkName;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int authenticationTypes;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string avatarDetail;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string avatarImgIdStr;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string backgroundImgIdStr;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string anchor;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string avatarImgId_str;
-}
-
-public class AvatarDetail
-{
-    /// <summary>
-    /// 
-    /// </summary>
-    public int userType;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int identityLevel;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string identityIconUrl;
-}
-
-public class Creators
-{
-    /// <summary>
-    /// 
-    /// </summary>
-    public string defaultAvatar;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int province;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int authStatus;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string followed;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string avatarUrl;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int accountStatus;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int gender;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int city;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int birthday;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long userId;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int userType;
-    /// <summary>
-    /// 岩酱岩酱岩酱
-    /// </summary>
-    public string nickname;
-    /// <summary>
-    /// 这里是岩酱
-    /// </summary>
-    public string signature;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string description;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string detailDescription;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int avatarImgId;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int backgroundImgId;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string backgroundUrl;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int authority;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string mutual;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string expertTags;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string experts;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int djStatus;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int vipType;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string remarkName;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int authenticationTypes;
-    /// <summary>
-    /// 
-    /// </summary>
-    public AvatarDetail avatarDetail;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string avatarImgIdStr;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string backgroundImgIdStr;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string anchor;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string avatarImgId_str;
-}
-
-public class Sq
-{
-    /// <summary>
-    /// 
-    /// </summary>
-    public int br;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int fid;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int size;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int vd;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int sr;
-}
-
-public class TracksItem
-{
-    /// <summary>
-    /// Reunion In The Wind(重逢风中）
-    /// </summary>
-    public string name;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int id;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int pst;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int t;
-    /// <summary>
-    /// 
-    /// </summary>
-    public List<ArItem> ar;
-    /// <summary>
-    /// 
-    /// </summary>
-    public List<string> alia;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int pop;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int st;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string rt;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int fee;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int v;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string crbt;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string cf;
-    /// <summary>
-    /// 
-    /// </summary>
-    public Al al;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int dt;
-    /// <summary>
-    /// 
-    /// </summary>
-    public H h;
-    /// <summary>
-    /// 
-    /// </summary>
-    public M m;
-    /// <summary>
-    /// 
-    /// </summary>
-    public L l;
-    /// <summary>
-    /// 
-    /// </summary>
-    public Sq sq;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string hr;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string a;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string cd;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int no;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string rtUrl;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int ftype;
-    /// <summary>
-    /// 
-    /// </summary>
-    public List<string> rtUrls;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int djId;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int copyright;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int s_id;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int mark;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int originCoverType;
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public string originSongSimpleData;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string tagPicList;
-    /// <summary>
-    /// 
-    /// </summary>
-    public bool resourceState;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int version;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string songJumpInfo;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string entertainmentTags;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int single;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string noCopyrightRcmd;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string rurl;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int mst;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int cp;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int mv;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int rtype;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long publishTime;
-}
-
-public class TrackIdsItem
-{
-    /// <summary>
-    /// 
-    /// </summary>
-    public int id;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int v;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int t;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int at;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string alg;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int uid;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string rcmdReason;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string sc;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string f;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string sr;
-}
-
-public class Playlist
-{
-    /// <summary>
-    /// 
-    /// </summary>
-    public long id;
-    /// <summary>
-    /// 睡觉听的纯音乐（与君梦中相会）
-    /// </summary>
-    public string name { get; set; }
-    /// <summary>
-    /// 
-    /// </summary>
-    public long coverImgId;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string coverImgUrl { get; set; }
-    /// <summary>
-    /// 
-    /// </summary>
-    public string coverImgId_str;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int adType;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long userId;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int createTime;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int status;
-    /// <summary>
-    /// 
-    /// </summary>
-    public bool opRecommend;
-    /// <summary>
-    /// 
-    /// </summary>
-    public bool highQuality;
-    /// <summary>
-    /// 
-    /// </summary>
-    public bool newImported;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int updateTime;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int trackCount;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int specialType;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int privacy;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int trackUpdateTime;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string commentThreadId;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int playCount;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long trackNumberUpdateTime;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int subscribedCount;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int cloudTrackCount;
-    /// <summary>
-    /// 
-    /// </summary>
-    public bool ordered;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string description;
-    /// <summary>
-    /// 
-    /// </summary>
-    public List<string> tags;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string updateFrequency;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int backgroundCoverId;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string backgroundCoverUrl;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int titleImage;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string titleImageUrl;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string englishTitle;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string officialPlaylistType;
-    /// <summary>
-    /// 
-    /// </summary>
-    public bool copied;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string relateResType;
-    /// <summary>
-    /// 
-    /// </summary>
-    public List<SubscribersItem> subscribers;
-    /// <summary>
-    /// 
-    /// </summary>
-    public bool subscribed;
-    /// <summary>
-    /// 
-    /// </summary>
-    public Creators creator;
-    /// <summary>
-    /// 
-    /// </summary>
-    public List<TracksItem> tracks;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string videoIds;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string videos;
-    /// <summary>
-    /// 
-    /// </summary>
-    public List<TrackIdsItem> trackIds;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string bannedTrackIds;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string mvResourceInfos;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int shareCount;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int commentCount;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string remixVideo;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string sharedUsers;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string historySharedUsers;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string gradeStatus;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string score;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string algTags;
-}
-
-public class FreeTrialPrivileges
-{
-    /// <summary>
-    /// 
-    /// </summary>
-    public string resConsumable;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string userConsumable;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string listenType;
-}
-
-public class ChargeInfoListItems
-{
-    /// <summary>
-    /// 
-    /// </summary>
-    public int rate;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string chargeUrl;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string chargeMessage;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int chargeType;
-}
-
-public class PrivilegesItems
-{
-    /// <summary>
-    /// 
-    /// </summary>
-    public int id;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int fee;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int payed;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int realPayed;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int st;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int pl;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int dl;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int sp;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int cp;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int subp;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string cs;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int maxbr;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int fl;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string pc;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string toast;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int flag;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string paidBigBang;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string preSell;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int playMaxbr;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int downloadMaxbr;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string maxBrLevel;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string playMaxBrLevel;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string downloadMaxBrLevel;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string plLevel;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string dlLevel;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string flLevel;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string rscl;
-    /// <summary>
-    /// 
-    /// </summary>
-    public FreeTrialPrivileges freeTrialPrivilege;
-    /// <summary>
-    /// 
-    /// </summary>
-    public List<ChargeInfoListItems> chargeInfoList;
-}
-
-public class GedanDetail
-{
-    /// <summary>
-    /// 
-    /// </summary>
-    public long code;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string relatedVideos;
-    /// <summary>
-    /// 
-    /// </summary>
-    public Playlist playlist { get; set; }
-    /// <summary>
-    /// 
-    /// </summary>
-    public string urls;
-    /// <summary>
-    /// 
-    /// </summary>
-    public List<PrivilegesItems> privileges;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string sharedPrivilege;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string resEntrance;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string fromUsers;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int fromUserCount;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string songFromUsers;
-}
-
-public class MusicCheck
-{
-    /// <summary>
-    /// 
-    /// </summary>
-    public bool success{ get; set; }
-    /// <summary>
-    /// 
-    /// </summary>
-    public string message{ get; set; }
-}
-
-public class ArItem1
-{
-    /// <summary>
-    /// 
-    /// </summary>
-    public int id;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string name;
-    /// <summary>
-    /// 
-    /// </summary>
-    public List<string> tns;
-    /// <summary>
-    /// 
-    /// </summary>
-    public List<string> @alias;
-}
-
-public class Al1
-{
-    /// <summary>
-    /// 
-    /// </summary>
-    public int id;
-    /// <summary>
-    /// 海阔天空
-    /// </summary>
-    public string name;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string picUrl { get; set; }
-    /// <summary>
-    /// 
-    /// </summary>
-    public List<string> tns;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string pic_str;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long pic;
-}
-
-public class H1
-{
-    /// <summary>
-    /// 
-    /// </summary>
-    public int br;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int fid;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int size;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int vd;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int sr;
-}
-
-public class M1
-{
-    /// <summary>
-    /// 
-    /// </summary>
-    public int br;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int fid;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int size;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int vd;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int sr;
-}
-
-public class L1
-{
-    /// <summary>
-    /// 
-    /// </summary>
-    public int br;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int fid;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int size;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int vd;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int sr;
-}
-
-public class Sq1
-{
-    /// <summary>
-    /// 
-    /// </summary>
-    public int br;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int fid;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int size;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int vd;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int sr;
-}
-
-public class SongsItem1
-{
-    /// <summary>
-    /// 海阔天空
-    /// </summary>
-    public string name { get; set; }
-    /// <summary>
-    /// 
-    /// </summary>
-    public long id;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int pst;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int t;
-    /// <summary>
-    /// 
-    /// </summary>
-    public List<ArItem1> ar;
-    /// <summary>
-    /// 
-    /// </summary>
-    public List<string> alia;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int pop;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int st;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string rt;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int fee;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int v;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string crbt;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string cf;
-    /// <summary>
-    /// 
-    /// </summary>
-    public Al1 al { get; set; }
-    /// <summary>
-    /// 
-    /// </summary>
-    public int dt;
-    /// <summary>
-    /// 
-    /// </summary>
-    public H1 h;
-    /// <summary>
-    /// 
-    /// </summary>
-    public M1 m;
-    /// <summary>
-    /// 
-    /// </summary>
-    public L1 l;
-    /// <summary>
-    /// 
-    /// </summary>
-    public Sq1 sq;
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public string hr;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string a;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string cd;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int no;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string rtUrl;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int ftype;
-    /// <summary>
-    /// 
-    /// </summary>
-    public List<string> rtUrls;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long djId;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long copyright;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long s_id;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long mark;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int originCoverType;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string originSongSimpleData;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string tagPicList;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string resourceState;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int version;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string songJumpInfo;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string entertainmentTags;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string awardTags;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int single;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string noCopyrightRcmd;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int mv;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int mst;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int cp;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int rtype;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string rurl;
-    /// <summary>
-    /// 
-    /// </summary>
-    public long publishTime;
-}
-
-public class FreeTrialPrivilege1
-{
-    /// <summary>
-    /// 
-    /// </summary>
-    public string resConsumable;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string userConsumable;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string listenType;
-}
-
-public class ChargeInfoListItem1
-{
-    /// <summary>
-    /// 
-    /// </summary>
-    public long rate;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string chargeUrl;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string chargeMessage;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int chargeType;
-}
-
-public class PrivilegesItem1
-{
-    /// <summary>
-    /// 
-    /// </summary>
-    public long id;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int fee;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int payed;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int st;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int pl;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int dl;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int sp;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int cp;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int subp;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string cs;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int maxbr;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int fl;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string toast;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int flag;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string preSell;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int playMaxbr;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int downloadMaxbr;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string maxBrLevel;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string playMaxBrLevel;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string downloadMaxBrLevel;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string plLevel;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string dlLevel;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string flLevel;
-    /// <summary>
-    /// 
-    /// </summary>
-    public string rscl;
-    /// <summary>
-    /// 
-    /// </summary>
-    public FreeTrialPrivilege1 freeTrialPrivilege;
-    /// <summary>
-    /// 
-    /// </summary>
-    public List<ChargeInfoListItem1> chargeInfoList;
-}
-
-public class MusicDetail
-{
-    /// <summary>
-    /// 
-    /// </summary>
-    public List<SongsItem1> songs { get; set; }
-    /// <summary>
-    /// 
-    /// </summary>
-    public List<PrivilegesItem1> privileges;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int code;
-}
-
-public class YunPlugin : IBotPlugin /* or ICorePlugin */
-{
+    //===========================================初始化===========================================
     static IConfigSource MyIni;
     PlayManager tempplayManager;
     InvokerData tempinvoker;
     Ts3Client tempts3Client;
-    public static string cookies1;
-    public static bool isEventnotadded = true;
+    public static string cookies;
     public static int playMode;
-    public static int randomPotsition = 0;
-    public static ArrayList SongQueue = new ArrayList();
-    SemaphoreSlim slimlock = new SemaphoreSlim(1, 1);
     public static string WangYiYunAPI_Address;
     public static string UNM_Address;
+    List<long> playlist = new List<long>();
+    public static int Playlocation = 0;
     public void Initialize()
     {
         string iniFilePath;
@@ -3110,8 +68,8 @@ public class YunPlugin : IBotPlugin /* or ICorePlugin */
 
         playMode = int.TryParse(MyIni.Configs["YunBot"].Get("playMode"), out int playModeValue) ? playModeValue : 0;
 
-        string cookies1Value = MyIni.Configs["YunBot"].Get("cookies1");
-        cookies1 = string.IsNullOrEmpty(cookies1Value) ? "" : cookies1Value;
+        string cookiesValue = MyIni.Configs["YunBot"].Get("cookies1");
+        cookies = string.IsNullOrEmpty(cookiesValue) ? "" : cookiesValue;
 
         string wangYiYunAPI_AddressValue = MyIni.Configs["YunBot"].Get("WangYiYunAPI_Address");
         WangYiYunAPI_Address = string.IsNullOrEmpty(wangYiYunAPI_AddressValue) ? "http://127.0.0.1:3000" : wangYiYunAPI_AddressValue;
@@ -3120,20 +78,19 @@ public class YunPlugin : IBotPlugin /* or ICorePlugin */
         UNM_Address = string.IsNullOrEmpty(unmAddressValue) ? "" : unmAddressValue;
 
         Console.WriteLine(playMode);
-        Console.WriteLine(cookies1);
+        Console.WriteLine(cookies);
         Console.WriteLine(WangYiYunAPI_Address);
         Console.WriteLine(UNM_Address);
     }
-
+    public void SetPlplayManager(PlayManager playManager)
+    {
+        tempplayManager = playManager;
+    }
     public PlayManager GetplayManager()
     {
         return tempplayManager;
     }
 
-    public void SetPlplayManager(PlayManager playManager)
-    {
-        tempplayManager = playManager;
-    }
     public InvokerData Getinvoker()
     {
         return tempinvoker;
@@ -3153,116 +110,17 @@ public class YunPlugin : IBotPlugin /* or ICorePlugin */
     {
         return tempts3Client;
     }
+    //===========================================初始化===========================================
 
-    public async Task AudioService_Playstoped(object sender, EventArgs e) //当上一首音乐播放完触发
-    {
-        await slimlock.WaitAsync();
-        try
-        {
-            Console.WriteLine("上一首歌结束");
-            if (playMode == 0)
-            {
-                var invoker = Getinvoker();
-                var playManager = GetplayManager();
-                var ts3Client = GetTs3Client();
-                if (SongQueue.Count == 0)
-                {
-                    return;
-                }
 
-                SongQueue.RemoveAt(0);
-                string nextsong = (string)SongQueue[0];
-                Console.WriteLine(SongQueue.Count.ToString());
-                Console.WriteLine(nextsong);
-                string musicurl = getMusicUrl(nextsong, true);
-                Console.WriteLine("url:" + musicurl);
-                await MainCommands.CommandPlay(playManager, invoker, musicurl);
-                string musicname = getMusicName(nextsong);
-                _ = ts3Client.SendChannelMessage("正在播放音乐：" + musicname);
-            }
-
-            if (playMode == 1)
-            {
-                var invoker = Getinvoker();
-                var playManager = GetplayManager();
-                var ts3Client = GetTs3Client();
-                if (SongQueue.Count == 0)
-                {
-                    return;
-                }
-                string prevSong = (string)SongQueue[0];
-                SongQueue.RemoveAt(0);
-                string nextsong = (string)SongQueue[0];
-                SongQueue.Add(prevSong);
-                Console.WriteLine(SongQueue.Count.ToString());
-                Console.WriteLine(nextsong);
-                string musicurl = getMusicUrl(nextsong, true);
-                Console.WriteLine("url:" + musicurl);
-                await MainCommands.CommandPlay(playManager, invoker, musicurl);
-                string musicname = getMusicName(nextsong);
-                _ = ts3Client.SendChannelMessage("正在播放音乐：" + musicname);
-            }
-
-            if (playMode == 2)
-            {
-                Random ran = new Random();
-                var invoker = Getinvoker();
-                var playManager = GetplayManager();
-                var ts3Client = GetTs3Client();
-                if (SongQueue.Count == 0)
-                {
-                    return;
-                }
-                string prevSong = (string)SongQueue[randomPotsition];
-                SongQueue.RemoveAt(randomPotsition);
-                randomPotsition = ran.Next(0, SongQueue.Count - 1);
-                string nextsong = (string)SongQueue[randomPotsition];
-                Console.WriteLine(SongQueue.Count.ToString());
-                Console.WriteLine(nextsong);
-                string musicurl = getMusicUrl(nextsong, true);
-                Console.WriteLine("url:" + musicurl);
-                await MainCommands.CommandPlay(playManager, invoker, musicurl);
-                string musicname = getMusicName(nextsong);
-                _ = ts3Client.SendChannelMessage("正在播放音乐：" + musicname);
-            }
-
-            if (playMode == 3)
-            {
-                Random ran = new Random();
-                var invoker = Getinvoker();
-                var playManager = GetplayManager();
-                var ts3Client = GetTs3Client();
-                if (SongQueue.Count == 0)
-                {
-                    return;
-                }
-                string prevSong = (string)SongQueue[randomPotsition];
-                SongQueue.RemoveAt(randomPotsition);
-                randomPotsition = ran.Next(0, SongQueue.Count - 1);
-                string nextsong = (string)SongQueue[randomPotsition];
-                SongQueue.Add(prevSong);
-                Console.WriteLine(SongQueue.Count.ToString());
-                Console.WriteLine(nextsong);
-                string musicurl = getMusicUrl(nextsong, true);
-                Console.WriteLine("url:" + musicurl);
-                await MainCommands.CommandPlay(playManager, invoker, musicurl);
-                string musicname = getMusicName(nextsong);
-                _ = ts3Client.SendChannelMessage("正在播放音乐：" + musicname);
-            }
-        }
-        finally
-        {
-            slimlock.Release();
-        }
-    }
-
+    //===========================================播放模式===========================================
     [Command("yun mode")]
-    public string playmode(int mode)
+    public string Playmode(int mode)
     {
         if (mode >= 0 && mode <= 3)
         {
             playMode = mode;
-            MyIni.Configs["YunBot"].Set("playMode",mode.ToString());
+            MyIni.Configs["YunBot"].Set("playMode", mode.ToString());
             MyIni.Save();
             return mode switch
             {
@@ -3276,192 +134,53 @@ public class YunPlugin : IBotPlugin /* or ICorePlugin */
         else
         {
             return "请输入正确的播放模式(0 到 3 之间的整数)";
-        }   
+        }
     }
+    //===========================================播放模式===========================================
 
-    [Command("yun gedanid")]
-    public async Task<string> playgedan(long id, PlayManager playManager, InvokerData invoker, Ts3Client ts3Client, Player player)
-    {
-        if (isEventnotadded)
-        {
-            player.OnSongEnd += AudioService_Playstoped;
-            Console.WriteLine("event added");
-            isEventnotadded = false;
-        }
-        SongQueue.Clear();
-        SetInvoker(invoker);
-        SetPlplayManager(playManager);
-        SetTs3Client(ts3Client);
-        string strid = id.ToString();
-        string url = WangYiYunAPI_Address + "/playlist/detail?id=" + strid;
-        string json = HttpGet(url);
-        GedanDetail gedanDetail = JsonSerializer.Deserialize<GedanDetail>(json);
-        string gedanname = gedanDetail.playlist.name;
-        string imgurl = gedanDetail.playlist.coverImgUrl;
-        _ = MainCommands.CommandBotDescriptionSet(ts3Client, gedanname);
-        _ = MainCommands.CommandBotAvatarSet(ts3Client, imgurl);
-        genList(id, SongQueue, ts3Client);
-        string firstmusicid;
-        if (playMode == 2 || playMode == 3)
-        {
-            Random ran = new Random();
-            randomPotsition = ran.Next(0, SongQueue.Count - 1);
-            firstmusicid = (string)SongQueue[randomPotsition];
-        }
-        else
-        {
-            randomPotsition = 0;
-            firstmusicid = (string)SongQueue[randomPotsition];
-        }
-        SongQueue.RemoveAt(randomPotsition);
-        string musicurl = getMusicUrl(firstmusicid, true);
-        Console.WriteLine(firstmusicid);
-        await MainCommands.CommandPlay(playManager, invoker, musicurl);
-        _ = ts3Client.SendChannelMessage("正在播放音乐：" + getMusicName(firstmusicid));
-        return "开始播放歌单";
-    }
 
-    [Command("yun gedan")]
-    public async Task<string> CommandGedan(string name, PlaylistManager playlistManager, ResolveContext resourceFactory, PlayManager playManager, InvokerData invoker, Ts3Client ts3Client, Player player)
-    {
-        string urlSearch = WangYiYunAPI_Address + "/search?keywords=" + name + "&limit=1&type=1000";
-        string json = HttpGet(urlSearch);
-        SearchGedan searchgedan = JsonSerializer.Deserialize<SearchGedan>(json);
-        long gedanid = searchgedan.result.playlists[0].id;
-        if (isEventnotadded)
-        {
-            player.OnSongEnd += AudioService_Playstoped;
-            Console.WriteLine("event added");
-            isEventnotadded = false;
-        }
-        SongQueue.Clear();
-        SetInvoker(invoker);
-        SetPlplayManager(playManager);
-        SetTs3Client(ts3Client);
-        string strid = gedanid.ToString();
-        string url = WangYiYunAPI_Address + "/playlist/detail?id=" + strid;
-        string jsons = HttpGet(url);
-        GedanDetail gedanDetail = JsonSerializer.Deserialize<GedanDetail>(jsons);
-        string gedanname = gedanDetail.playlist.name;
-        string imgurl = gedanDetail.playlist.coverImgUrl;
-        _ = MainCommands.CommandBotDescriptionSet(ts3Client, gedanname);
-        _ = MainCommands.CommandBotAvatarSet(ts3Client, imgurl);
-        genList(gedanid, SongQueue, ts3Client);
-        string firstmusicid;
-        if (playMode == 2 || playMode == 3)
-        {
-            Random ran = new Random();
-            randomPotsition = ran.Next(0, SongQueue.Count - 1);
-            firstmusicid = (string)SongQueue[randomPotsition];
-        }
-        else
-        {
-            randomPotsition = 0;
-            firstmusicid = (string)SongQueue[randomPotsition];
-        }
-        SongQueue.RemoveAt(randomPotsition);
-        string musicurl = getMusicUrl(firstmusicid, true);
-        Console.WriteLine(firstmusicid);
-        await MainCommands.CommandPlay(playManager, invoker, musicurl);
-        _ = ts3Client.SendChannelMessage("正在播放音乐：" + getMusicName(firstmusicid));
-        return "开始播放歌单";
-    }
-
+    //===========================================单曲播放===========================================
     [Command("yun play")]
-    public string CommandYunPlay(string arguments, PlayManager playManager, InvokerData invoker, Ts3Client ts3Client)
+    public async Task<string> CommandYunPlay(string arguments, PlayManager playManager, InvokerData invoker, Ts3Client ts3Client)
     {
-        long firstmusicid;
-        string firstmusicname;
-        string musicurl;
-        string musicdetailurl;
-        string musicdetailjson;
-        string musicimgurl;
-        string musicname;
-        string musicCheckurl;
-        string songName;
-        string artist = "";
-        MusicCheck musicCheckjson;
-        string SearchmusicCheckjson;
-        MusicDetail musicDetail;
         SetInvoker(invoker);
         SetPlplayManager(playManager);
         SetTs3Client(ts3Client);
-        string urlSearch = WangYiYunAPI_Address + "/search?keywords=" + arguments + "&limit=30";
-        string Searchjson = HttpGet(urlSearch);
-        yunSearchSong yunSearchSong = JsonSerializer.Deserialize<yunSearchSong>(Searchjson);
-        string[] splitarguments = arguments.Split(" ");
-        if (splitarguments.Length == 1)
+
+        string urlSearch = $"{WangYiYunAPI_Address}/search?keywords={arguments}&limit=30";
+        string searchJson = await HttpGetAsync(urlSearch);
+        yunSearchSong yunSearchSong = JsonSerializer.Deserialize<yunSearchSong>(searchJson);
+        string[] splitArguments = arguments.Split(" ");
+
+        if (splitArguments.Length == 1)
         {
             // 单独歌曲名称
-            songName = splitarguments[0];
-            firstmusicid = yunSearchSong.result.songs[0].id;
-            musicCheckurl = WangYiYunAPI_Address + "/check/music?id=" + firstmusicid.ToString();
-            SearchmusicCheckjson = HttpGet(musicCheckurl);
-            musicCheckjson = JsonSerializer.Deserialize<MusicCheck>(SearchmusicCheckjson);
-            Console.WriteLine(musicCheckjson.success.ToString());
-            if (musicCheckjson.success.ToString() == "False")
+            string songName = splitArguments[0];
+
+            // 确保不超过搜索结果的歌曲数量，最多检查30首歌曲
+            int maxSongsToCheck = Math.Min(yunSearchSong.result.songs.Count, 30);
+
+            for (int s = 0; s < maxSongsToCheck; s++)
             {
-                musicurl = getcheckMusicUrl(firstmusicid, true);
-            }else{
-                musicurl = getMusicUrl(firstmusicid, true);
-            }
-            firstmusicname = yunSearchSong.result.songs[0].name;
-            Console.WriteLine(firstmusicid + firstmusicname);     
-            musicdetailurl = WangYiYunAPI_Address + "/song/detail?ids=" + firstmusicid.ToString();
-            musicdetailjson = HttpGet(musicdetailurl);
-            musicDetail = JsonSerializer.Deserialize<MusicDetail>(musicdetailjson);
-            musicimgurl = musicDetail.songs[0].al.picUrl;
-            musicname = musicDetail.songs[0].name;
-            MainCommands.CommandBotAvatarSet(ts3Client, musicimgurl);
-            MainCommands.CommandBotDescriptionSet(ts3Client, musicname);
-            Console.WriteLine(musicurl);
-            if (musicurl != "error")
-            {
-                MainCommands.CommandPlay(playManager, invoker, musicurl);
-                MainCommands.CommandBotDescriptionSet(ts3Client, firstmusicname);
-                ts3Client.SendChannelMessage("正在播放音乐：" + firstmusicname);
-                return "正在播放音乐：" + firstmusicname;
+                if (yunSearchSong.result.songs[s].name == songName)
+                {
+                    ProcessSong(yunSearchSong.result.songs[s].id, ts3Client, playManager, invoker);
+                    return $"正在播放音乐：{yunSearchSong.result.songs[s].name}";
+                }
             }
         }
-        else if (splitarguments.Length == 2)
+        else if (splitArguments.Length == 2)
         {
             // 歌曲名称和歌手
-            songName = splitarguments[0];
-            artist = splitarguments[1];
-            for (int s = 0; s <= 30; s++)
+            string songName = splitArguments[0];
+            string artist = splitArguments[1];
+
+            for (int s = 0; s < yunSearchSong.result.songs.Count; s++)
             {
-                Console.WriteLine(yunSearchSong.result.songs[s].name.ToString() + "|" + yunSearchSong.result.songs[s].artists[0].name.ToString() + "|" + yunSearchSong.result.songs[0].id);
-                if (yunSearchSong.result.songs[s].name.ToString() == songName && yunSearchSong.result.songs[s].artists[0].name.ToString() == artist)
+                if (yunSearchSong.result.songs[s].name == songName && yunSearchSong.result.songs[s].artists[0].name == artist)
                 {
-                    
-                    firstmusicid = yunSearchSong.result.songs[s].id;
-                    musicCheckurl = WangYiYunAPI_Address + "/check/music?id=" + firstmusicid.ToString();
-                    SearchmusicCheckjson = HttpGet(musicCheckurl);
-                    musicCheckjson = JsonSerializer.Deserialize<MusicCheck>(SearchmusicCheckjson);
-                    Console.WriteLine(musicCheckjson.success.ToString());
-                    if (musicCheckjson.success.ToString() == "False")
-                    {
-                        musicurl = getcheckMusicUrl(firstmusicid, true);
-                    }else{
-                        musicurl = getMusicUrl(firstmusicid, true);
-                    }
-                    firstmusicname = yunSearchSong.result.songs[s].name;
-                    Console.WriteLine(firstmusicid + firstmusicname);     
-                    musicdetailurl = WangYiYunAPI_Address + "/song/detail?ids=" + firstmusicid.ToString();
-                    musicdetailjson = HttpGet(musicdetailurl);
-                    musicDetail = JsonSerializer.Deserialize<MusicDetail>(musicdetailjson);
-                    musicimgurl = musicDetail.songs[0].al.picUrl;
-                    musicname = musicDetail.songs[0].name;
-                    MainCommands.CommandBotAvatarSet(ts3Client, musicimgurl);
-                    MainCommands.CommandBotDescriptionSet(ts3Client, musicname);
-                    Console.WriteLine(musicurl);
-                    if (musicurl != "error")
-                    {
-                        MainCommands.CommandPlay(playManager, invoker, musicurl);
-                        MainCommands.CommandBotDescriptionSet(ts3Client, firstmusicname);
-                        ts3Client.SendChannelMessage("正在播放音乐：" + firstmusicname);
-                        return "正在播放音乐：" + firstmusicname;
-                    }
+                    ProcessSong(yunSearchSong.result.songs[s].id, ts3Client, playManager, invoker);
+                    return $"正在播放音乐：{yunSearchSong.result.songs[s].name}";
                 }
             }
         }
@@ -3471,189 +190,208 @@ public class YunPlugin : IBotPlugin /* or ICorePlugin */
             Console.WriteLine("请输入有效的歌曲信息");
             return "请输入有效的歌曲信息";
         }
-        Console.WriteLine(songName + "|" + artist);
-        // Console.WriteLine(yunSearchSong.result.songs[0].artists[0].name.ToString());
-        return "发生未知错误";
+
+        Console.WriteLine("未找到匹配的歌曲");
+        return "未找到匹配的歌曲";
     }
 
-    [Command("yun playid")]
-    public string CommandYunPlayId(long arguments, PlayManager playManager, InvokerData invoker, Ts3Client ts3Client)
+    //===========================================单曲播放===========================================
+
+
+    //===========================================歌单播放===========================================
+    [Command("yun gedan")]
+    public async Task<string> CommandYunGedan(string arguments, PlayManager playManager, InvokerData invoker, Ts3Client ts3Client)
     {
+        playlist.Clear();
         SetInvoker(invoker);
         SetPlplayManager(playManager);
         SetTs3Client(ts3Client);
-        string musicurl = getMusicUrl(arguments, true);
-        string musicdetailurl = WangYiYunAPI_Address + "/song/detail?ids=" + arguments;
-        string musicdetailjson = HttpGet(musicdetailurl);
-        MusicDetail musicDetail = JsonSerializer.Deserialize<MusicDetail>(musicdetailjson);
-        string musicimgurl = musicDetail.songs[0].al.picUrl;
-        string musicname = musicDetail.songs[0].name;
-        MainCommands.CommandBotAvatarSet(ts3Client, musicimgurl);
-        MainCommands.CommandBotDescriptionSet(ts3Client, musicname);
-        Console.WriteLine(musicurl);
-        if (musicurl != "error")
+        string urlSearch = $"{WangYiYunAPI_Address}/playlist/detail?id={arguments}";
+        string searchJson = await HttpGetAsync(urlSearch);
+        GedanDetail gedanDetail = JsonSerializer.Deserialize<GedanDetail>(searchJson);
+        string gedanshuliang = gedanDetail.playlist.trackCount.ToString();
+        _ = ts3Client.SendChannelMessage($"歌单共{gedanshuliang}首歌曲，正在添加到播放列表,请稍后。");
+        int loopCount = -1;
+        for (int i = 0; i < gedanDetail.playlist.trackCount; i += 50)
         {
-            MainCommands.CommandPlay(playManager, invoker, musicurl);
-            ts3Client.SendChannelMessage("正在播放音乐id为：" + arguments.ToString());
-            string result = "正在播放音乐id为：" + arguments.ToString();
-            return (result);
+            Console.WriteLine($"查询循环次数{loopCount+1}");
+            loopCount += 1;
+            if (i + 50 > gedanDetail.playlist.trackCount)
+            {   
+                // 如果歌单的歌曲数量小于50，那么查询的数量就是歌曲的数量，否则查询的数量就是歌曲的数量减去50乘以查询的次数
+                i = gedanDetail.playlist.trackCount < 50 ? gedanDetail.playlist.trackCount : gedanDetail.playlist.trackCount - 50 * loopCount;
+                // 构建查询URL，如果歌单的歌曲数量小于50，那么偏移量就是0，否则偏移量就是查询的数量
+                int offset = gedanDetail.playlist.trackCount < 50 ? 0 : i;
+                urlSearch = $"{WangYiYunAPI_Address}/playlist/track/all?id={arguments}&limit=50&offset={offset}";
+                searchJson = await HttpGetAsync(urlSearch);
+                GeDan geDan1 = JsonSerializer.Deserialize<GeDan>(searchJson);
+                for (int j = 0; j < i; j++){
+                    playlist.Add(geDan1.songs[j].id);
+                    Console.WriteLine(geDan1.songs[j].id);
+                }
+                break;
+            }
+            urlSearch = $"{WangYiYunAPI_Address}/playlist/track/all?id={arguments}&limit=50&offset={i}";
+            searchJson = await HttpGetAsync(urlSearch);
+            GeDan geDan = JsonSerializer.Deserialize<GeDan>(searchJson);
+            for (int j = 0; j < 50; j++){
+                playlist.Add(geDan.songs[j].id);
+                Console.WriteLine(geDan.songs[j].id);
+            }
         }
-        return "发生未知错误";
-    }
-
-    [Command("yun add")]
-    public string CommandYunAdd(string arguments, PlayManager playManager, InvokerData invoker, Ts3Client ts3Client)
-    {
-        SetInvoker(invoker);
-        SetPlplayManager(playManager);
-        SetTs3Client(ts3Client);
-        string urlSearch = WangYiYunAPI_Address + "/search?keywords=" + arguments + "&limit=1";
-        string Searchjson = HttpGet(urlSearch);
-        yunSearchSong yunSearchSong = JsonSerializer.Deserialize<yunSearchSong>(Searchjson);
-        long firstmusicid = yunSearchSong.result.songs[0].id;
-        string firstmusicname = yunSearchSong.result.songs[0].name;
-        Console.WriteLine(firstmusicid + firstmusicname);
-        string musicurl = getMusicUrl(firstmusicid, true);
-        string musicdetailurl = WangYiYunAPI_Address + "/song/detail?ids=" + firstmusicid.ToString();
-        string musicdetailjson = HttpGet(musicdetailurl);
-        MusicDetail musicDetail = JsonSerializer.Deserialize<MusicDetail>(musicdetailjson);
-        string musicimgurl = musicDetail.songs[0].al.picUrl;
-        string musicname = musicDetail.songs[0].name;
-        MainCommands.CommandBotAvatarSet(ts3Client, musicimgurl);
-        MainCommands.CommandBotDescriptionSet(ts3Client, musicname);
-        Console.WriteLine(musicurl);
-        if (musicurl != "error")
+        SongPlayMode(playManager,invoker,ts3Client);
+        playManager.PlaybackStopped += async (song, stopReason) =>
         {
-            MainCommands.CommandAdd(playManager, invoker, musicurl);
-            MainCommands.CommandBotDescriptionSet(ts3Client, firstmusicname);
-            ts3Client.SendChannelMessage("以下音乐已经添加到播放列表中：" + firstmusicname);
-            string result = "以下音乐已经添加到播放列表中：" + firstmusicname;
-            return (result);
-        }
-        return "发生未知错误";
+            SongPlayMode(playManager,invoker,ts3Client);
+            await Task.CompletedTask;
+        };
+        Playlocation = 0;
+        Console.WriteLine($"歌单共{playlist.Count}首歌");
+        return $"播放列表加载完成,已加载{playlist.Count}首歌";
     }
+    //===========================================歌单播放===========================================
 
-    [Command("yun addid")]
-    public async Task<string> CommandYunAddId(long arguments, PlayManager playManager, InvokerData invoker, Ts3Client ts3Client)
-    {
-        SetInvoker(invoker);
-        SetPlplayManager(playManager);
-        SetTs3Client(ts3Client);
-        string musicurl = getMusicUrl(arguments, true);
-        Console.WriteLine(musicurl);
-        string musicdetailurl = WangYiYunAPI_Address + "/song/detail?ids=" + arguments;
-        string musicdetailjson = HttpGet(musicdetailurl);
-        MusicDetail musicDetail = JsonSerializer.Deserialize<MusicDetail>(musicdetailjson);
-        string musicimgurl = musicDetail.songs[0].al.picUrl;
-        string musicname = musicDetail.songs[0].name;
-        await MainCommands.CommandBotAvatarSet(ts3Client, musicimgurl);
-        await MainCommands.CommandBotDescriptionSet(ts3Client, musicname);
-        if (musicurl != "error")
-        {
-            _ = MainCommands.CommandAdd(playManager, invoker, musicurl);
-            _ = ts3Client.SendChannelMessage("以下id的音乐已经添加到播放列表中：" + arguments.ToString());
-            string result = "以下id的音乐已经添加到播放列表中：" + arguments.ToString();
-            return (result);
-        }
-        return "发生未知错误";
-    }
-
+    //===========================================下一曲===========================================
     [Command("yun next")]
-    public async Task<string> CommandYunNext(PlaylistManager playlistManager, ResolveContext resourceFactory, PlayManager playManager, InvokerData invoker, Ts3Client ts3Client)
+    public Task<string> CommandYunNext(PlayManager playManager, InvokerData invoker, Ts3Client ts3Client)
     {
-        SetInvoker(invoker);
-        SetPlplayManager(playManager);
-        SetTs3Client(ts3Client);
-        if (playManager.IsPlaying && SongQueue.Count >= 1)
-        {
-            await playManager.Stop();
-            if (SongQueue.Count == 0)
-            {
-                return "播放列表为空";
-            }
+        SongPlayMode(playManager,invoker,ts3Client);
+        return Task.FromResult($"");
+    }
+    //===========================================下一曲=============================================
 
-            if (playMode == 2 || playMode == 3)
-            {
-                Random ran = new Random();
-                randomPotsition = ran.Next(0, SongQueue.Count - 1);
-                string nextsong = (string)SongQueue[randomPotsition];
-                SongQueue.RemoveAt(randomPotsition);
-                if (playMode == 3)
-                {
-                    SongQueue.Add(nextsong);
-                }
-                Console.WriteLine(SongQueue.Count.ToString());
-                Console.WriteLine(nextsong);
-                string musicurl = getMusicUrl(nextsong, true);
-                string musicname = getMusicName(nextsong);
-                await ts3Client.SendChannelMessage("正在播放音乐："+musicname);
-                await MainCommands.CommandPlay(playManager, invoker, musicurl);
-                return "开始播放下一首音乐";
-            }
-            else
-            {
-                string nextsong = (string)SongQueue[0];
-                SongQueue.RemoveAt(0);
-                if (playMode == 1)
-                {
-                    SongQueue.Add(nextsong);
-                }
-                Console.WriteLine(SongQueue.Count.ToString());
-                Console.WriteLine(nextsong);
-                string musicurl = getMusicUrl(nextsong, true);
-                string musicname = getMusicName(nextsong);
-                await ts3Client.SendChannelMessage("正在播放音乐：" + musicname);
-                await MainCommands.CommandPlay(playManager, invoker, musicurl);
-                return "开始播放下一首音乐";
-            }
-        }
-        else
+    //===========================================播放逻辑===========================================
+    private void SongPlayMode(PlayManager playManager, InvokerData invoker, Ts3Client ts3Client)
+    {
+        try
         {
-            return "无法播放下一首音乐";
+            switch (playMode)
+            {
+                case 0: //顺序播放
+                    Playlocation += 1;
+                    ProcessSong(playlist[Playlocation], ts3Client, playManager, invoker);
+                    Console.WriteLine($"正在播放第{Playlocation + 1}首歌");
+                    break;
+                case 1:  //顺序循环
+                    if (Playlocation == playlist.Count - 1)
+                    {
+                        Playlocation = 0;
+                        ProcessSong(playlist[Playlocation], ts3Client, playManager, invoker);
+                        Console.WriteLine($"正在播放第{Playlocation + 1}首歌");
+                    }
+                    else
+                    {
+                        Playlocation += 1;
+                        ProcessSong(playlist[Playlocation], ts3Client, playManager, invoker);
+                        Console.WriteLine($"正在播放第{Playlocation + 1}首歌");
+                    }
+                    break;
+                case 2:  //随机播放
+                    Random random = new Random();
+                    Playlocation = random.Next(0, playlist.Count);
+                    ProcessSong(playlist[Playlocation], ts3Client, playManager, invoker);
+                    Console.WriteLine($"正在播放第{Playlocation + 1}首歌");
+                    break;
+                case 3:  //随机循环
+                    Random random1 = new Random();
+                    Playlocation = random1.Next(0, playlist.Count);
+                    ProcessSong(playlist[Playlocation], ts3Client, playManager, invoker);
+                    Console.WriteLine($"正在播放第{Playlocation + 1}首歌");
+                    break;
+                default:
+                    break;
+            } 
+        }
+        catch (Exception)
+        {
+            Console.WriteLine("播放列表已空");
+            _ = ts3Client.SendChannelMessage("播放列表已空");
         }
     }
-
-    [Command("yun login")]
-    public static async Task<string> CommanloginAsync(Ts3Client ts3Client, TsFullClient tsClient)
+    private async void ProcessSong(long id, Ts3Client ts3Client, PlayManager playManager, InvokerData invoker)
     {
-        string url1 = WangYiYunAPI_Address + "/login/qr/key" + "?timestamp=" + GetTimeStamp();
-        string json1 = HttpGet(url1);
-        Console.WriteLine(json1);
-        LoginKey loginKey = JsonSerializer.Deserialize<LoginKey>(json1);
-        string key = loginKey.data.unikey;
-        string url2 = WangYiYunAPI_Address + "/login/qr/create?key=" + key + "&qrimg=true&timestamp=" + GetTimeStamp();
-        string json2 = HttpGet(url2);
-        LoginImg loginImg = JsonSerializer.Deserialize<LoginImg>(json2);
-        string base64String = loginImg.data.qrimg;
+        long musicId = id;
+        string musicCheckUrl = $"{WangYiYunAPI_Address}/check/music?id={musicId}";
+        string searchMusicCheckJson = await HttpGetAsync(musicCheckUrl);
+        MusicCheck musicCheckJson = JsonSerializer.Deserialize<MusicCheck>(searchMusicCheckJson);
+
+        // 根据音乐检查结果获取音乐播放URL
+        string musicUrl = musicCheckJson.success.ToString() == "False" ? await GetcheckMusicUrl(musicId, true) : await GetMusicUrl(musicId, true);
+
+        // 构造获取音乐详情的URL
+        string musicDetailUrl = $"{WangYiYunAPI_Address}/song/detail?ids={musicId}";
+        string musicDetailJson = await HttpGetAsync(musicDetailUrl);
+        MusicDetail musicDetail = JsonSerializer.Deserialize<MusicDetail>(musicDetailJson);
+
+        // 从音乐详情中获取音乐图片URL和音乐名称
+        string musicImgUrl = musicDetail.songs[0].al.picUrl;
+        string musicName = musicDetail.songs[0].name;
+        Console.WriteLine($"歌曲id：{musicId}，歌曲名称：{musicName}，版权：{musicCheckJson.success}");
+
+        // 设置Bot的头像为音乐图片
+        _ = MainCommands.CommandBotAvatarSet(ts3Client, musicImgUrl);
+
+        // 设置Bot的描述为音乐名称
+        _ = MainCommands.CommandBotDescriptionSet(ts3Client, musicName);
+
+        // 在控制台输出音乐播放URL
+        Console.WriteLine(musicUrl);
+
+        // 如果音乐播放URL不是错误，则添加到播放列表并通知频道
+        if (musicUrl != "error")
+        {
+            _ = MainCommands.CommandPlay(playManager, invoker, musicUrl);
+
+            // 更新Bot的描述为当前播放的音乐名称
+            _ = MainCommands.CommandBotDescriptionSet(ts3Client, musicName);
+
+            // 发送消息到频道，通知正在播放的音乐
+            _ = ts3Client.SendChannelMessage($"正在播放第{Playlocation+1}首：{musicName}");
+        }
+    }
+    //===========================================播放逻辑===========================================
+
+    //===========================================登录部分===========================================
+    [Command("yun login")]
+    public static async Task<string> CommandLoginAsync(Ts3Client ts3Client, TsFullClient tsClient)
+    {
+        // 获取登录二维码的 key
+        string key = await GetLoginKey();
+
+        // 生成登录二维码并获取二维码图片的 base64 字符串
+        string base64String = await GetLoginQRImage(key);
+
+        // 发送二维码图片到 TeamSpeak 服务器频道
         await ts3Client.SendChannelMessage("正在生成二维码");
-        await ts3Client.SendChannelMessage(loginImg.data.qrimg);
-        Console.WriteLine(base64String);
-        string[] img = base64String.Split(",");
-        byte[] bytes = Convert.FromBase64String(img[1]);
-        Stream stream = new MemoryStream(bytes);
-        await tsClient.UploadAvatar(stream);
+        await ts3Client.SendChannelMessage(base64String);
+
+        // 将 base64 字符串转换为二进制图片数据，上传到 TeamSpeak 服务器作为头像
+        await UploadQRImage(tsClient, base64String);
+
+        // 设置 TeamSpeak 服务器的描述信息
         await ts3Client.ChangeDescription("请用网易云APP扫描二维码登陆");
+
         int i = 0;
         long code;
         string result;
+
         while (true)
         {
-            string url3 = WangYiYunAPI_Address + "/login/qr/check?key=" + key + "&timestamp=" + GetTimeStamp();
-            string json3 = HttpGet(url3);
-            Console.WriteLine(json3);
-            Status1 status1 = JsonSerializer.Deserialize<Status1>(json3);
-            code = status1.code;
-            cookies1 = getCookies();
-            cookies1 = status1.cookie;
-            changeCookies(cookies1);
+            // 检查登录状态
+            Status1 status = await CheckLoginStatus(key);
+
+            code = status.code;
+            cookies = status.cookie;
             i = i + 1;
             Thread.Sleep(1000);
+
             if (i == 120)
             {
                 result = "登陆失败或者超时";
                 await ts3Client.SendChannelMessage("登陆失败或者超时");
                 break;
             }
+
             if (code == 803)
             {
                 result = "登陆成功";
@@ -3661,108 +399,120 @@ public class YunPlugin : IBotPlugin /* or ICorePlugin */
                 break;
             }
         }
-        await tsClient.DeleteAvatar();
-        changeCookies(cookies1);
-        MyIni.Configs["YunBot"].Set("cookies1",$"\"{cookies1}\"");
+
+        // 登录完成后删除上传的头像
+        _ = await tsClient.DeleteAvatar();
+
+        // 更新 cookies 到配置文件
+        MyIni.Configs["YunBot"].Set("cookies", $"\"{cookies}\"");
         MyIni.Save();
+
         return result;
     }
 
-    //以下全是功能性函数
-    public static string getMusicUrl(long id, bool usingcookie = false) //获得歌曲URL
+    // 获取登录二维码的 key
+    private static async Task<string> GetLoginKey()
     {
-        string cookie = getCookies();
-        string url;
-        if (usingcookie && cookie != "")
+        string url = WangYiYunAPI_Address + "/login/qr/key" + "?timestamp=" + GetTimeStamp();
+        string json = await HttpGetAsync(url);
+        LoginKey loginKey = JsonSerializer.Deserialize<LoginKey>(json);
+        return loginKey.data.unikey;
+    }
+
+    // 生成登录二维码并获取二维码图片的 base64 字符串
+    private static async Task<string> GetLoginQRImage(string key)
+    {
+        string url = WangYiYunAPI_Address + $"/login/qr/create?key={key}&qrimg=true&timestamp={GetTimeStamp()}";
+        string json = await HttpGetAsync(url);
+        LoginImg loginImg = JsonSerializer.Deserialize<LoginImg>(json);
+        return loginImg.data.qrimg;
+    }
+
+    // 上传二维码图片到 TeamSpeak 服务器
+    private static async Task UploadQRImage(TsFullClient tsClient, string base64String)
+    {
+        string[] img = base64String.Split(",");
+        byte[] bytes = Convert.FromBase64String(img[1]);
+        Stream stream = new MemoryStream(bytes);
+        _ = await tsClient.UploadAvatar(stream);
+    }
+
+    // 检查登录状态
+    private static async Task<Status1> CheckLoginStatus(string key)
+    {
+        string url = WangYiYunAPI_Address + $"/login/qr/check?key={key}&timestamp={GetTimeStamp()}";
+        string json = await HttpGetAsync(url);
+        Status1 status = JsonSerializer.Deserialize<Status1>(json);
+        Console.WriteLine(json);
+        return status;
+    }
+    //===============================================登录部分===============================================
+
+
+    //===============================================获取歌曲信息===============================================
+    //以下全是功能性函数
+    public static async Task<string> GetMusicUrl(long id, bool usingCookie = false)
+    {
+        return await GetMusicUrl(id.ToString(), usingCookie);
+    }
+
+    public static async Task<string> GetMusicUrl(string id, bool usingCookie = false)
+    {
+        string url = $"{WangYiYunAPI_Address}/song/url?id={id}";
+        if (usingCookie && !string.IsNullOrEmpty(cookies))
         {
-            url = WangYiYunAPI_Address + "/song/url?id=" + id.ToString() + "&cookie=" + cookie;
+            url += $"&cookie={cookies}";
         }
-        else
+
+        string musicUrlJson = await HttpGetAsync(url);
+        musicURL musicUrl = JsonSerializer.Deserialize<musicURL>(musicUrlJson);
+
+        if (musicUrl.code != 200)
         {
-            url = WangYiYunAPI_Address + "/song/url?id=" + id.ToString();
+            // 处理错误情况，这里你可以根据实际情况进行适当的处理
+            return string.Empty;
         }
-        string musicurljson = HttpGet(url);
-        musicURL musicurl = JsonSerializer.Deserialize<musicURL>(musicurljson);
-        long code = musicurl.code;
-        string mp3 = musicurl.data[0].url;
+
+        string mp3 = musicUrl.data[0].url;
         return mp3;
     }
-    public static string getcheckMusicUrl(long id, bool usingcookie = false) //获得无版权歌曲URL
+
+    public static async Task<string> GetcheckMusicUrl(long id, bool usingcookie = false) //获得无版权歌曲URL
     {
-        string cookie = getCookies();
         string url;
         url = WangYiYunAPI_Address + "/song/url?id=" + id.ToString() + "&proxy=" + UNM_Address;
-        string musicurljson = HttpGet(url);
+        string musicurljson = await HttpGetAsync(url);
         musicURL musicurl = JsonSerializer.Deserialize<musicURL>(musicurljson);
-        long code = musicurl.code;
         string mp3 = musicurl.data[0].url.ToString();
-        string checkmp3 = mp3.Replace("http://music.163.com",UNM_Address);
+        string checkmp3 = mp3.Replace("http://music.163.com", UNM_Address);
         return checkmp3;
     }
-    public static string getMusicUrl(string id, bool usingcookie = false)//获得歌曲URL
-    {
-        string cookie = getCookies();
-        string url;
-        if (usingcookie && cookie != "")
-        {
-            url = WangYiYunAPI_Address + "/song/url?id=" + id + "&cookie=" + cookie;
-        }
-        else
-        {
-            url = WangYiYunAPI_Address + "/song/url?id=" + id;
-        }
-        string musicurljson = HttpGet(url);
-        musicURL musicurl = JsonSerializer.Deserialize<musicURL>(musicurljson);
-        string mp3 = musicurl.data[0].url;
-        return mp3;
-    }
 
-    public static string getMusicName(long arguments)//获得歌曲名称
+    public static async Task<string> GetMusicName(string arguments)//获得歌曲名称
     {
-        string musicurl = getMusicUrl(arguments, true);
-        Console.WriteLine(musicurl);
         string musicdetailurl = WangYiYunAPI_Address + "/song/detail?ids=" + arguments;
-        string musicdetailjson = HttpGet(musicdetailurl);
+        string musicdetailjson = await HttpGetAsync(musicdetailurl);
         MusicDetail musicDetail = JsonSerializer.Deserialize<MusicDetail>(musicdetailjson);
         string musicname = musicDetail.songs[0].name;
         return musicname;
     }
+    //===============================================获取歌曲信息===============================================
 
-    public static string getMusicName(string arguments)//获得歌曲名称
-    {
-        string musicurl = getMusicUrl(arguments, true);
-        Console.WriteLine(musicurl);
-        string musicdetailurl = WangYiYunAPI_Address + "/song/detail?ids=" + arguments;
-        string musicdetailjson = HttpGet(musicdetailurl);
-        MusicDetail musicDetail = JsonSerializer.Deserialize<MusicDetail>(musicdetailjson);
-        string musicname = musicDetail.songs[0].name;
-        return musicname;
-    }
 
-    public static string HttpGet(string url)//Http请求
+
+    //===============================================HTTP相关===============================================
+    public static async Task<string> HttpGetAsync(string url)
     {
-        //ServicePolongManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback(CheckValidationResult);
-        Encoding encoding = Encoding.UTF8;
         HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
         request.Method = "GET";
         request.Accept = "text/html, application/xhtml+xml, */*";
         request.ContentType = "application/json";
 
-        HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-        using (StreamReader reader = new StreamReader(response.GetResponseStream(), Encoding.UTF8))
-        {
-            return reader.ReadToEnd();
-        }
-    }
-
-    public static string getCookies() //读取cookie
-    {
-        return cookies1;
-    }
-
-    public static void changeCookies(string newcookies) //更改cookie
-    {
-        cookies1 = newcookies;
+        // 异步获取响应
+        using HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync();
+        // 异步读取响应流
+        using StreamReader reader = new StreamReader(response.GetResponseStream(), Encoding.UTF8);
+        return await reader.ReadToEndAsync();
     }
 
     public static string GetTimeStamp() //获得时间戳
@@ -3770,31 +520,9 @@ public class YunPlugin : IBotPlugin /* or ICorePlugin */
         TimeSpan ts = DateTime.Now - new DateTime(1970, 1, 1, 0, 0, 0, 0);
         return Convert.ToInt64(ts.TotalSeconds).ToString();
     }
-
-    public static void genList(long id, ArrayList SongQueue, Ts3Client ts3Client) //生成歌单
-    {
-        string gedanid = id.ToString();
-        string url = WangYiYunAPI_Address + "/playlist/track/all?id=" + gedanid;
-        string gedanjson = HttpGet(url);
-        GeDan Gedans = JsonSerializer.Deserialize<GeDan>(gedanjson);
-        long numOfSongs = Gedans.songs.Count();
-        if (numOfSongs > 100)
-        {
-            Console.WriteLine("警告歌单过大，可能需要一定的时间生成");
-        }
-        for (int i = 0; i < numOfSongs; i++)
-        {
-            long musicid = Gedans.songs[i].id;
-            if (musicid > 0)
-            {
-                SongQueue.Add(musicid.ToString());
-            }
-        }
-    }
-
-
+    //===============================================HTTP相关===============================================
     public void Dispose()
     {
-        SongQueue.Clear();
+        playlist.Clear();
     }
 }
