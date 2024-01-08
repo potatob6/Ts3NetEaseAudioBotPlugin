@@ -9,9 +9,9 @@ TS3AudioBot-NetEaseCloudmusic-UnblockNeteaseMusic-plugin
 
 ## 关于设置文件YunSettings.ini
 `playMode=`是播放模式   
-`WangYiYunAPI_Address=`是网易云API地址，目前默认的是一个大佬的远程 API，如果加载速度过慢或者无法访问，请自行部署API并修改API地址。（为了保护你的隐私强烈建议你自行部署API）   
+`WangYiYunAPI_Address=`是网易云API地址   
 `cookies1=`是保存在你本地的身份验证，通过二维码登录获取。（不需要修改）   
-`UNM_Address=`是 UnblockNeteaseMusic 服务的API地址。 
+`UNM_Address=`是 UnblockNeteaseMusic 服务的API地址。    
 
 ## 替换插件文件后需要重启TS3AudioBot服务！！！
 
