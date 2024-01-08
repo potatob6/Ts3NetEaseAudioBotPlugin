@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -14,9 +12,7 @@ using Nini.Config;
 using TS3AudioBot;
 using TS3AudioBot.Audio;
 using TS3AudioBot.CommandSystem;
-using TS3AudioBot.Playlists;
 using TS3AudioBot.Plugins;
-using TS3AudioBot.ResourceFactories;
 using TSLib.Full;
 using NeteaseCloudMusicApi;
 
