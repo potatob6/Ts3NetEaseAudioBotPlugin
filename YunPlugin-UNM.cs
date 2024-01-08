@@ -250,6 +250,12 @@ public class YunPlugin : IBotPlugin
         await SongPlayMode(playManager, invoker, ts3Client);
     }
     //===========================================下一曲=============================================
+    [Command("yun stop")]
+    public async Task CommandYunStop(PlayManager playManager, Ts3Client ts3Client)
+    {
+        playlist.Clear();
+        await playManager.Stop();
+    }
 
     //===========================================播放逻辑===========================================
     private async Task SongPlayMode(PlayManager playManager, InvokerData invoker, Ts3Client ts3Client)
@@ -291,7 +297,7 @@ public class YunPlugin : IBotPlugin
         catch (Exception)
         {
             Console.WriteLine("播放列表已空");
-            _ = ts3Client.SendChannelMessage("播放列表已空");
+            _ = ts3Client.SendChannelMessage("已停止播放");
         }
     }
     private async Task ProcessSong(long id, Ts3Client ts3Client, PlayManager playManager, InvokerData invoker)
