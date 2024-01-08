@@ -33,11 +33,12 @@ public class YunPlugin : IBotPlugin
     public static string UNM_Address;
     List<long> playlist = new List<long>();
     public static int Playlocation = 0;
-
+    private readonly SemaphoreSlim playlock = new SemaphoreSlim(1, 1);
+    private readonly SemaphoreSlim Listeninglock = new SemaphoreSlim(1, 1);
     public void Initialize()
     {
         string iniFilePath;
-
+        
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
             Console.WriteLine("运行在Windows环境.");
@@ -82,8 +83,11 @@ public class YunPlugin : IBotPlugin
         Console.WriteLine(cookies);
         Console.WriteLine(WangYiYunAPI_Address);
         Console.WriteLine(UNM_Address);
-        
+
     }
+
+    
+
     public void SetPlplayManager(PlayManager playManager)
     {
         tempplayManager = playManager;
@@ -112,6 +116,7 @@ public class YunPlugin : IBotPlugin
     {
         return tempts3Client;
     }
+    
     //===========================================初始化===========================================
 
 
@@ -143,33 +148,22 @@ public class YunPlugin : IBotPlugin
 
     //===========================================单曲播放===========================================
     [Command("yun play")]
-    public async Task<string> CommandYunPlay(string arguments, PlayManager playManager, InvokerData invoker, Ts3Client ts3Client)
+    public async Task CommandYunPlay(string arguments, PlayManager playManager, InvokerData invoker, Ts3Client ts3Client)
     {
-        playManager.ResourceStopped -= async (sender, e) => await SongPlayMode(playManager, invoker, ts3Client);
+        //playlist.Clear();
         SetInvoker(invoker);
         SetPlplayManager(playManager);
         SetTs3Client(ts3Client);
-        
+        bool songFound = false;
         string urlSearch = $"{WangYiYunAPI_Address}/search?keywords={arguments}&limit=30";
         string searchJson = await HttpGetAsync(urlSearch);
         yunSearchSong yunSearchSong = JsonSerializer.Deserialize<yunSearchSong>(searchJson);
         string[] splitArguments = arguments.Split(" ");
-
+        Console.WriteLine(splitArguments.Length);
         if (splitArguments.Length == 1)
         {
-            // 单独歌曲名称
-            string songName = splitArguments[0];
-
-            // 确保不超过搜索结果的歌曲数量，最多检查30首歌曲
-            int maxSongsToCheck = Math.Min(yunSearchSong.result.songs.Count, 30);
-
-            for (int s = 0; s < maxSongsToCheck; s++)
-            {
-                if (yunSearchSong.result.songs[s].name == songName)
-                {
-                    _ = ProcessSong(yunSearchSong.result.songs[s].id, ts3Client, playManager, invoker);
-                }
-            }
+            _ = ProcessSong(yunSearchSong.result.songs[0].id, ts3Client, playManager, invoker);
+            songFound = true;
         }
         else if (splitArguments.Length == 2)
         {
@@ -182,6 +176,8 @@ public class YunPlugin : IBotPlugin
                 if (yunSearchSong.result.songs[s].name == songName && yunSearchSong.result.songs[s].artists[0].name == artist)
                 {
                     _ = ProcessSong(yunSearchSong.result.songs[s].id, ts3Client, playManager, invoker);
+                    songFound = true;
+                    break;
                 }
             }
         }
@@ -189,11 +185,13 @@ public class YunPlugin : IBotPlugin
         {
             // 输入为空或格式不符合预期
             Console.WriteLine("请输入有效的歌曲信息");
-            return "请输入有效的歌曲信息";
+            _ = ts3Client.SendChannelMessage("请输入有效的歌曲信息");
         }
-
-        Console.WriteLine("未找到匹配的歌曲");
-        return "未找到匹配的歌曲";
+        Playlocation = songFound && Playlocation > 0 ? Playlocation - 1 : Playlocation;
+        if (!songFound)
+        {
+            _ = ts3Client.SendChannelMessage("未找到歌曲");
+        }
     }
 
     //===========================================单曲播放===========================================
@@ -242,8 +240,9 @@ public class YunPlugin : IBotPlugin
         }
         Playlocation = 0;
         _ = ProcessSong(playlist[0], ts3Client, playManager, invoker);
-        //playManager.ResourceStopped += async (sender, e) => await SongPlayMode(playManager, invoker, ts3Client);
         Console.WriteLine($"歌单共{playlist.Count}首歌");
+        await Listeninglock.WaitAsync();
+        playManager.ResourceStopped += async (sender, e) => await SongPlayMode(playManager, invoker, ts3Client);
         return $"播放列表加载完成,已加载{playlist.Count}首歌";
     }
     //===========================================歌单播放===========================================
@@ -301,43 +300,57 @@ public class YunPlugin : IBotPlugin
     }
     private async Task ProcessSong(long id, Ts3Client ts3Client, PlayManager playManager, InvokerData invoker)
     {
-        long musicId = id;
-        string musicCheckUrl = $"{WangYiYunAPI_Address}/check/music?id={musicId}";
-        string searchMusicCheckJson = await HttpGetAsync(musicCheckUrl);
-        MusicCheck musicCheckJson = JsonSerializer.Deserialize<MusicCheck>(searchMusicCheckJson);
+        await playlock.WaitAsync();
+        try {
+            long musicId = id;
+            string musicCheckUrl = $"{WangYiYunAPI_Address}/check/music?id={musicId}";
+            string searchMusicCheckJson = await HttpGetAsync(musicCheckUrl);
+            MusicCheck musicCheckJson = JsonSerializer.Deserialize<MusicCheck>(searchMusicCheckJson);
 
-        // 根据音乐检查结果获取音乐播放URL
-        string musicUrl = musicCheckJson.success.ToString() == "False" ? await GetcheckMusicUrl(musicId, true) : await GetMusicUrl(musicId, true);
+            // 根据音乐检查结果获取音乐播放URL
+            string musicUrl = musicCheckJson.success.ToString() == "False" ? await GetcheckMusicUrl(musicId, true) : await GetMusicUrl(musicId, true);
 
-        // 构造获取音乐详情的URL
-        string musicDetailUrl = $"{WangYiYunAPI_Address}/song/detail?ids={musicId}";
-        string musicDetailJson = await HttpGetAsync(musicDetailUrl);
-        MusicDetail musicDetail = JsonSerializer.Deserialize<MusicDetail>(musicDetailJson);
+            // 构造获取音乐详情的URL
+            string musicDetailUrl = $"{WangYiYunAPI_Address}/song/detail?ids={musicId}";
+            string musicDetailJson = await HttpGetAsync(musicDetailUrl);
+            MusicDetail musicDetail = JsonSerializer.Deserialize<MusicDetail>(musicDetailJson);
 
-        // 从音乐详情中获取音乐图片URL和音乐名称
-        string musicImgUrl = musicDetail.songs[0].al.picUrl;
-        string musicName = musicDetail.songs[0].name;
-        Console.WriteLine($"歌曲id：{musicId}，歌曲名称：{musicName}，版权：{musicCheckJson.success}");
+            // 从音乐详情中获取音乐图片URL和音乐名称
+            string musicImgUrl = musicDetail.songs[0].al.picUrl;
+            string musicName = musicDetail.songs[0].name;
+            Console.WriteLine($"歌曲id：{musicId}，歌曲名称：{musicName}，版权：{musicCheckJson.success}");
 
-        // 设置Bot的头像为音乐图片
-        _ = MainCommands.CommandBotAvatarSet(ts3Client, musicImgUrl);
+            // 设置Bot的头像为音乐图片
+            _ = MainCommands.CommandBotAvatarSet(ts3Client, musicImgUrl);
 
-        // 设置Bot的描述为音乐名称
-        _ = MainCommands.CommandBotDescriptionSet(ts3Client, musicName);
-
-        // 在控制台输出音乐播放URL
-        Console.WriteLine(musicUrl);
-
-        // 如果音乐播放URL不是错误，则添加到播放列表并通知频道
-        if (musicUrl != "error")
-        {
-            _ = MainCommands.CommandPlay(playManager, invoker, musicUrl);
-
-            // 更新Bot的描述为当前播放的音乐名称
+            // 设置Bot的描述为音乐名称
             _ = MainCommands.CommandBotDescriptionSet(ts3Client, musicName);
 
-            // 发送消息到频道，通知正在播放的音乐
-            _ = ts3Client.SendChannelMessage($"正在播放第{Playlocation+1}首：{musicName}");
+            // 在控制台输出音乐播放URL
+            Console.WriteLine(musicUrl);
+
+            // 如果音乐播放URL不是错误，则添加到播放列表并通知频道
+            if (musicUrl != "error")
+            {
+                _ = MainCommands.CommandPlay(playManager, invoker, musicUrl);
+
+                // 更新Bot的描述为当前播放的音乐名称
+                _ = MainCommands.CommandBotDescriptionSet(ts3Client, musicName);
+
+                // 发送消息到频道，通知正在播放的音乐
+                if (playlist.Count == 0)
+                {
+                    _ = ts3Client.SendChannelMessage($"正在播放：{musicName}");
+                }
+                else
+                {
+                    _ = ts3Client.SendChannelMessage($"正在播放第{Playlocation+1}首：{musicName}");
+                }
+            }
+        }
+        finally
+        {
+            playlock.Release();
         }
     }
     //===========================================播放逻辑===========================================
@@ -514,6 +527,6 @@ public class YunPlugin : IBotPlugin
     //===============================================HTTP相关===============================================
     public void Dispose()
     {
-
+        
     }
 }
