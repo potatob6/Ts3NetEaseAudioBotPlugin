@@ -1,8 +1,6 @@
-# TS3AudioBot-NetEaseCloudmusic-plugin
-在[ZHANGTIANYAO1/TS3AudioBot-NetEaseCloudmusic-plugin](https://github.com/ZHANGTIANYAO1/TS3AudioBot-NetEaseCloudmusic-plugin)的基础上兼容Linux.
-支持版权歌曲解锁。  
-使用 [Nini](https://github.com/bmatzelle/nini) 实现ini文件的操作。  
-使用 [Costura.Fody](https://github.com/Fody/Costura/) 打包。  
+# TS3AudioBot-NetEaseCloudmusic-UNM
+TS3AudioBot-NetEaseCloudmusic-UnblockNeteaseMusic-plugin
+
 
 ## 关于解锁版权歌曲
 需要在自建的 [NeteaseCloudMusicApi](https://github.com/Binaryify/NeteaseCloudMusicApi)（推荐Docker版）里面的 app.js 中添加 `process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0`, 如果是docker版的话就在环境里面添加`NODE_TLS_REJECT_UNAUTHORIZED = 0`。  
@@ -14,6 +12,7 @@
 `cookies1=`是保存在你本地的身份验证，通过二维码登录获取。（不需要修改）   
 `UNM_Address=`是 UnblockNeteaseMusic 服务的API地址。 
 
+## 替换插件文件后需要重启TS3AudioBot服务！！！
 
 ## 目前的指令：
 正在播放的歌曲的图片和名称可以点机器人看它的头像和描述  
@@ -36,3 +35,10 @@ vip音乐想要先登陆才能播放完整版本:（输入指令后扫描机器�
 `1 = 顺序循环`    
 `2 = 随机播放`    
 `3 = 随机循环`    
+
+
+## 使用的开源库
+
+[Nini](https://github.com/bmatzelle/nini) 
+[Costura.Fody](https://github.com/Fody/Costura/)
+[ZHANGTIANYAO1/TS3AudioBot-NetEaseCloudmusic-plugin](https://github.com/ZHANGTIANYAO1/TS3AudioBot-NetEaseCloudmusic-plugin) 
