@@ -39,6 +39,6 @@ vip音乐想要先登陆才能播放完整版本:（输入指令后扫描机器�
 
 ## 使用的开源库
 
-[Nini](https://github.com/bmatzelle/nini) 
-[Costura.Fody](https://github.com/Fody/Costura/)
+[Nini](https://github.com/bmatzelle/nini)     
+[Costura.Fody](https://github.com/Fody/Costura/)    
 [ZHANGTIANYAO1/TS3AudioBot-NetEaseCloudmusic-plugin](https://github.com/ZHANGTIANYAO1/TS3AudioBot-NetEaseCloudmusic-plugin) 
