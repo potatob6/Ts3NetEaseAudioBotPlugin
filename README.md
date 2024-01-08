@@ -1,6 +1,7 @@
 # TS3AudioBot-NetEaseCloudmusic-UNM
 TS3AudioBot-NetEaseCloudmusic-UnblockNeteaseMusic-plugin
 
+支持Windows、Linux、Docker环境。
 
 ## 关于解锁版权歌曲
 需要在自建的 [NeteaseCloudMusicApi](https://github.com/Binaryify/NeteaseCloudMusicApi)（推荐Docker版）里面的 app.js 中添加 `process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0`, 如果是docker版的话就在环境里面添加`NODE_TLS_REJECT_UNAUTHORIZED = 0`。  
