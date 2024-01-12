@@ -41,7 +41,7 @@ vip音乐想要先登陆才能播放完整版本:（输入指令后扫描机器�
 `3 = 随机循环`    
 
 
-# 如果你需要基于主线[TS3AudioBot](https://github.com/Splamy/TS3AudioBot)构建Docker版的TS3AudioBot：   
+## 如果你需要基于主线[TS3AudioBot](https://github.com/Splamy/TS3AudioBot)构建Docker版的TS3AudioBot：   
 Dockerfile支持x86、arm64、arm32三种架构，默认为x86。   
 构建命令：`docker build -f Dockerfile -t local.docker.image/ts3audiobot:latest .`   
 运行方法参考[TS3AudioBot_docker](https://github.com/getdrunkonmovies-com/TS3AudioBot_docker)文档   
