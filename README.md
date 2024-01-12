@@ -40,6 +40,13 @@ vip音乐想要先登陆才能播放完整版本:（输入指令后扫描机器�
 `2 = 随机播放`    
 `3 = 随机循环`    
 
+##关于docker TS3AudioBot自行构建 bot来自主线
+#发现的问题：在armbian中运行容器出现关于ts3audiobot.db权限问题导致无法使用，youtube-dl版本过低
+解决方案：取消Dockerfile原有的子账户运行，改为root权限运行，改用yt-dlp（需自行修改ts3audiobot.toml中youtube-dl = { path = "yt-dlp" }）
+
+关于自行构建系统架构问题，已经在Dockerfile安排了3套架构x86、arm64、arm32默认X86，需要哪种用哪种。
+`docker build -f Dockerfile -t local.docker.image/ts3audiobot:latest .` 
+
 
 ## 使用的开源库
 
