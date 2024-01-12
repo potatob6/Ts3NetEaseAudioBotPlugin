@@ -40,18 +40,22 @@ vip音乐想要先登陆才能播放完整版本:（输入指令后扫描机器�
 `2 = 随机播放`    
 `3 = 随机循环`    
 
-# 关于docker TS3AudioBot自行构建 bot来自主线[TS3AudioBot](https://github.com/Splamy/TS3AudioBot) 
-## 发现的问题：在armbian中运行容器出现关于ts3audiobot.db权限问题导致无法使用，youtube-dl版本过低
-解决方案：取消Dockerfile原有的子账户运行，改为root权限运行，改用yt-dlp（需自行修改ts3audiobot.toml中youtube-dl = { path = "yt-dlp" }）
 
-关于自行构建系统架构问题，已经在Dockerfile安排了3套架构x86、arm64、arm32默认X86，需要哪种用哪种。
-`docker build -f Dockerfile -t local.docker.image/ts3audiobot:latest .` 
-运行方法同样参考[TS3AudioBot_docker](https://github.com/getdrunkonmovies-com/TS3AudioBot_docker) 
+# 如果你需要基于主线[TS3AudioBot](https://github.com/Splamy/TS3AudioBot)构建Docker版的TS3AudioBot：   
+Dockerfile支持x86、arm64、arm32三种架构，默认为x86。   
+构建命令：`docker build -f Dockerfile -t local.docker.image/ts3audiobot:latest .`   
+运行方法参考[TS3AudioBot_docker](https://github.com/getdrunkonmovies-com/TS3AudioBot_docker)文档   
+
+在armbian中运行如果遇到关于ts3audiobot.db的权限问题，可以改为root权限运行。   
+如果提示youtube-dl版本过低，则可更换为yt-dlp：
+    更改ts3audiobot.toml文件中 `youtube-dl = { path = "yt-dlp" }`   
 
 
-## 使用的开源库
 
-[Nini](https://github.com/bmatzelle/nini)     
-[Costura.Fody](https://github.com/Fody/Costura/)  
-[TS3AudioBot](https://github.com/Splamy/TS3AudioBot)   
-[ZHANGTIANYAO1/TS3AudioBot-NetEaseCloudmusic-plugin](https://github.com/ZHANGTIANYAO1/TS3AudioBot-NetEaseCloudmusic-plugin) 
+## 感谢
+
+- [Splamy](https://github.com/Splamy) 的 [TS3AudioBot](https://github.com/Splamy/TS3AudioBot) 项目   
+- [bmatzelle](https://github.com/bmatzelle) 的 [Nini](https://github.com/bmatzelle/nini) 项目   
+- [Fody](https://github.com/Fody) 的 [Costura.Fody](https://github.com/Fody/Costura/) 项目   
+- [ZHANGTIANYAO1](https://github.com/ZHANGTIANYAO1) 的 [TS3AudioBot-NetEaseCloudmusic-plugin](https://github.com/ZHANGTIANYAO1/TS3AudioBot-NetEaseCloudmusic-plugin) 项目   
+- [lauren12133](https://github.com/lauren12133) 关于TS3AudioBot编译Docker的教程和代码。
