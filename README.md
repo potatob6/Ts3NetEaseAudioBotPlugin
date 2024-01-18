@@ -46,8 +46,8 @@ Dockerfile支持x86、arm64、arm32三种架构，默认为x86。
 构建命令：`docker build -f Dockerfile -t local.docker.image/ts3audiobot:latest .`   
 运行方法参考[TS3AudioBot_docker](https://github.com/getdrunkonmovies-com/TS3AudioBot_docker)文档   
 
-在armbian中运行如果遇到关于ts3audiobot.db的权限问题，可以改为root权限运行。   
-如果提示youtube-dl版本过低，则可更换为yt-dlp：
+相比主线解决了部分设备中关于ts3audiobot.db的权限无法运行的问题，Dockerfile中程序运行用户改为了root。   
+取消了主线使用的youtube-dl（已经停止更新），更换为目前更新的yt-dlp：
     更改ts3audiobot.toml文件中 `youtube-dl = { path = "yt-dlp" }`   
 
 
