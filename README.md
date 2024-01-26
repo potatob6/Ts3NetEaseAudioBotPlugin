@@ -42,13 +42,13 @@ vip音乐想要先登陆才能播放完整版本:（输入指令后扫描机器�
 
 
 ## 如果你需要基于主线[TS3AudioBot](https://github.com/Splamy/TS3AudioBot)构建Docker版的TS3AudioBot：   
-Dockerfile支持x86、arm64、arm32三种架构，默认为x86。   
+Dockerfile支持x86、arm64、arm32三种架构，默认为x86。 如需其他架构请拉取Dockerfile修改注释  
 构建命令：`docker build -f Dockerfile -t local.docker.image/ts3audiobot:latest .`   
 运行方法参考[TS3AudioBot_docker](https://github.com/getdrunkonmovies-com/TS3AudioBot_docker)文档   
 
 相比主线解决了部分设备中关于ts3audiobot.db的权限无法运行的问题，Dockerfile中程序运行用户改为了root。   
-取消了主线使用的youtube-dl（已经停止更新），更换为目前更新的yt-dlp：    
-    更改ts3audiobot.toml文件中 `youtube-dl = { path = "yt-dlp" }`   
+添加支持yt-dlp：    
+    需要更改ts3audiobot.toml文件中 `youtube-dl = { path = "yt-dlp" }`   
 
 
 
