@@ -243,45 +243,6 @@ public class YunPlugin : IBotPlugin
     }
     //===========================================添加到歌单=========================================
 
-        //===========================================添加到歌单id=========================================
-    [Command("yun addid")]
-    public async Task CommandYunAdd(string arguments, PlayManager playManager, InvokerData invoker, Ts3Client ts3Client, Player player)
-    {
-        SetInvoker(invoker);
-        SetPlplayManager(playManager);
-        SetTs3Client(ts3Client);
-        bool songFound = false;
-        string arguments_1 = Uri.EscapeDataString(arguments);
-        string urlSearch = $"{WangYiYunAPI_Address}/search?keywords={arguments_1}&limit=30";
-        string searchJson = await HttpGetAsync(urlSearch);
-        yunSearchSong yunSearchSong = JsonSerializer.Deserialize<yunSearchSong>(searchJson);
-        //string[] splitArguments = arguments.Split(" ");
-        //Console.WriteLine(splitArguments.Length);
-        if(yunSearchSong.result.songs.Count != 0)
-        {
-            playlist.Add(yunSearchSong.result.songs[0].id);
-            Console.WriteLine(yunSearchSong.result.songs[0].id);
-            songFound = true;
-            _ = ts3Client.SendChannelMessage($"已将{yunSearchSong.result.songs[0].name}加入播放列表");
-        }
-
-        Playlocation = songFound && Playlocation > 0 ? Playlocation - 1 : Playlocation;
-        if (!songFound)
-        {
-            //_ = ts3Client.SendChannelMessage("未找到歌曲");
-            _ = ts3Client.SendChannelMessage("未找到歌曲");
-            return;
-        }
-        
-        if(!playManager.IsPlaying)
-        {
-            _ = ProcessSong(playlist[0], ts3Client, playManager, invoker);
-        }
-        await Listeninglock.WaitAsync();
-        playManager.ResourceStopped += async (sender, e) => await SongPlayMode(playManager, invoker, ts3Client);
-    }
-    //===========================================添加到歌单id=========================================
-
     //===========================================歌单播放===========================================
     [Command("yun gedan")]
     public async Task<string> CommandYunGedan(string arguments, PlayManager playManager, InvokerData invoker, Ts3Client ts3Client, Player player)
