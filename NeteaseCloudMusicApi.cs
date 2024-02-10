@@ -121,6 +121,26 @@ namespace NeteaseCloudMusicApi
         public long code;
     }
 
+    public class PlaylistKeywordsSearch
+    {
+        
+        public PlaylistKeywordResult result { get; set; }
+    }
+
+    public class PlaylistKeywordResult
+    {
+        
+        public List<Playlist> playlists { get; set; }
+
+        public long playlistCount { get; set; }
+
+        public bool hasMore;
+
+        public List<string> hlWords { get; set; }
+
+        public string searchQcReminder;
+    }
+
     public class FreeTrialInfo
     {
 
@@ -1163,7 +1183,7 @@ namespace NeteaseCloudMusicApi
     public class Playlist
     {
 
-        public long id;
+        public long id { get; set; }
 
         public string name { get; set; }
 

@@ -251,6 +251,67 @@ public class YunPlugin : IBotPlugin
         SetInvoker(invoker);
         SetPlplayManager(playManager);
         SetTs3Client(ts3Client);
+        string arguments_1 = Uri.EscapeDataString(arguments);
+        string urlSearch = $"{WangYiYunAPI_Address}/search?keywords={arguments_1}&type=1000&limit=10";
+        string searchJson = await HttpGetAsync(urlSearch);
+        PlaylistKeywordsSearch gedanDetail = JsonSerializer.Deserialize<PlaylistKeywordsSearch>(searchJson);
+        if(gedanDetail == null || gedanDetail.result.playlists.Count == 0)
+        {
+            return "没有找到歌单，请检查输入";
+        }
+        string gedanid = gedanDetail.result.playlists[0].id.ToString();
+        string gedanshuliang = gedanDetail.result.playlists[0].trackCount.ToString();
+        Console.WriteLine($"gedanid={gedanid}, gedanshuliang={gedanshuliang}");
+        _ = ts3Client.SendChannelMessage($"已找到歌单{gedanDetail.result.playlists[0].name}");
+        _ = ts3Client.SendChannelMessage($"歌单共{gedanshuliang}首歌曲，正在添加到播放列表,请稍后。");
+
+        int loopCount = -1;
+        for (int i = 0; i < gedanDetail.result.playlists[0].trackCount; i += 50)
+        {
+            Console.WriteLine($"查询循环次数{loopCount+1}");
+            loopCount += 1;
+            if (i + 50 > gedanDetail.result.playlists[0].trackCount)
+            {   
+                // 如果歌单的歌曲数量小于50，那么查询的数量就是歌曲的数量，否则查询的数量就是歌曲的数量减去50乘以查询的次数
+                i = gedanDetail.result.playlists[0].trackCount < 50 ? gedanDetail.result.playlists[0].trackCount : gedanDetail.result.playlists[0].trackCount - 50 * loopCount;
+                // 构建查询URL，如果歌单的歌曲数量小于50，那么偏移量就是0，否则偏移量就是查询的数量
+                int offset = gedanDetail.result.playlists[0].trackCount < 50 ? 0 : i;
+                urlSearch = $"{WangYiYunAPI_Address}/playlist/track/all?id={gedanid}&limit=50&offset={offset}";
+                searchJson = await HttpGetAsync(urlSearch);
+                GeDan geDan1 = JsonSerializer.Deserialize<GeDan>(searchJson);
+                for (int j = 0; j < i; j++){
+                    playlist.Add(geDan1.songs[j].id);
+                    Console.WriteLine(geDan1.songs[j].id);
+                }
+                break;
+            }
+            urlSearch = $"{WangYiYunAPI_Address}/playlist/track/all?id={gedanid}&limit=50&offset={i}";
+            searchJson = await HttpGetAsync(urlSearch);
+            GeDan geDan = JsonSerializer.Deserialize<GeDan>(searchJson);
+            for (int j = 0; j < 50; j++){
+                playlist.Add(geDan.songs[j].id);
+                Console.WriteLine(geDan.songs[j].id);
+            }
+        }
+
+        Playlocation = 0;
+        _ = ProcessSong(playlist[0], ts3Client, playManager, invoker);
+        Console.WriteLine($"歌单共{playlist.Count}首歌");
+        await Listeninglock.WaitAsync();
+        playManager.ResourceStopped += async (sender, e) => await SongPlayMode(playManager, invoker, ts3Client);
+        return $"播放列表加载完成,已加载{playlist.Count}首歌";
+    }
+    //===========================================歌单播放===========================================
+
+
+    //===========================================歌单id播放===========================================
+    [Command("yun gedanid")]
+    public async Task<string> CommandYunGedanId(string arguments, PlayManager playManager, InvokerData invoker, Ts3Client ts3Client, Player player)
+    {
+        playlist.Clear();
+        SetInvoker(invoker);
+        SetPlplayManager(playManager);
+        SetTs3Client(ts3Client);
         string urlSearch = $"{WangYiYunAPI_Address}/playlist/detail?id={arguments}";
         string searchJson = await HttpGetAsync(urlSearch);
         GedanDetail gedanDetail = JsonSerializer.Deserialize<GedanDetail>(searchJson);
@@ -291,7 +352,7 @@ public class YunPlugin : IBotPlugin
         playManager.ResourceStopped += async (sender, e) => await SongPlayMode(playManager, invoker, ts3Client);
         return $"播放列表加载完成,已加载{playlist.Count}首歌";
     }
-    //===========================================歌单播放===========================================
+    //===========================================歌单id播放===========================================
 
     //===========================================下一曲===========================================
     [Command("yun next")]
