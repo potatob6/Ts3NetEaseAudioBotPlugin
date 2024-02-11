@@ -35,7 +35,7 @@ public class YunPlugin : IBotPlugin
     private readonly SemaphoreSlim Listeninglock = new SemaphoreSlim(1, 1);
 
     private bool lockSelfName = false;
-    private string SelfName;
+    private string SelfName = "";
     public void Initialize()
     {
         string iniFilePath;
@@ -402,6 +402,12 @@ public class YunPlugin : IBotPlugin
     {
         try
         {
+            if(playlist.Count == 0)
+            {
+                _ = ts3Client.SendChannelMessage("已停止播放");
+                await ChangeNameToMusicName(tsClient, SelfName, true);
+                return;
+            }
             switch (playMode)
             {
                 case 0: //顺序播放
@@ -467,7 +473,15 @@ public class YunPlugin : IBotPlugin
             }
 
             //设置Bot的昵称为音乐名称
-            _ = MainCommands.CommandBotName(ts3Client, name);
+            try {
+                await MainCommands.CommandBotName(ts3Client, name);
+            }catch(Exception)
+            {
+                if(SelfName != "")
+                {
+                    _ = MainCommands.CommandBotName(ts3Client, SelfName);
+                }
+            }
             // 设置Bot的头像为音乐图片
             _ = MainCommands.CommandBotAvatarSet(ts3Client, musicImgUrl);
             // 设置Bot的描述为音乐名称
