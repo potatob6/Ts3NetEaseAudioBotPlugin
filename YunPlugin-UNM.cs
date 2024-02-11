@@ -175,10 +175,9 @@ public class YunPlugin : IBotPlugin
         //Console.WriteLine(splitArguments.Length);
         if(yunSearchSong.result.songs.Count != 0)
         {
-            _ = ProcessSong(yunSearchSong.result.songs[0].id, ts3Client, playManager, invoker);
+            _ = ProcessSong(yunSearchSong.result.songs[0].id, ts3Client, playManager, invoker, tsClient);
             await Listeninglock.WaitAsync();
             playManager.ResourceStopped += async (sender, e) => await SongPlayMode(playManager, invoker, ts3Client, tsClient);
-            Listeninglock.Release();
             songFound = true;
         }
         /*
@@ -255,12 +254,11 @@ public class YunPlugin : IBotPlugin
         
         if(!playManager.IsPlaying)
         {
-            _ = ProcessSong(playlist[0], ts3Client, playManager, invoker);
+            _ = ProcessSong(playlist[0], ts3Client, playManager, invoker, tsClient);
         }
 
         await Listeninglock.WaitAsync();
         playManager.ResourceStopped += async (sender, e) => await SongPlayMode(playManager, invoker, ts3Client, tsClient);
-        Listeninglock.Release();
     }
     //===========================================添加到歌单=========================================
 
@@ -317,11 +315,10 @@ public class YunPlugin : IBotPlugin
         }
 
         Playlocation = 0;
-        _ = ProcessSong(playlist[0], ts3Client, playManager, invoker);
+        _ = ProcessSong(playlist[0], ts3Client, playManager, invoker, tsClient);
         Console.WriteLine($"歌单共{playlist.Count}首歌");
         await Listeninglock.WaitAsync();
         playManager.ResourceStopped += async (sender, e) => await SongPlayMode(playManager, invoker, ts3Client, tsClient);
-        Listeninglock.Release();
         return $"播放列表加载完成,已加载{playlist.Count}首歌";
     }
     //===========================================歌单播放===========================================
@@ -370,11 +367,10 @@ public class YunPlugin : IBotPlugin
             }
         }
         Playlocation = 0;
-        _ = ProcessSong(playlist[0], ts3Client, playManager, invoker);
+        _ = ProcessSong(playlist[0], ts3Client, playManager, invoker, tsClient);
         Console.WriteLine($"歌单共{playlist.Count}首歌");
         await Listeninglock.WaitAsync();
         playManager.ResourceStopped += async (sender, e) => await SongPlayMode(playManager, invoker, ts3Client, tsClient);
-        Listeninglock.Release();
         return $"播放列表加载完成,已加载{playlist.Count}首歌";
     }
     //===========================================歌单id播放===========================================
@@ -412,29 +408,29 @@ public class YunPlugin : IBotPlugin
             {
                 case 0: //顺序播放
                     Playlocation += 1;
-                    await ProcessSong(playlist[Playlocation], ts3Client, playManager, invoker); 
+                    await ProcessSong(playlist[Playlocation], ts3Client, playManager, invoker, tsClient); 
                     break;
                 case 1:  //顺序循环
                     if (Playlocation == playlist.Count - 1)
                     {
                         Playlocation = 0;
-                        await ProcessSong(playlist[Playlocation], ts3Client, playManager, invoker);
+                        await ProcessSong(playlist[Playlocation], ts3Client, playManager, invoker, tsClient);
                     }
                     else
                     {
                         Playlocation += 1;
-                        await ProcessSong(playlist[Playlocation], ts3Client, playManager, invoker);
+                        await ProcessSong(playlist[Playlocation], ts3Client, playManager, invoker, tsClient);
                     }
                     break;
                 case 2:  //随机播放
                     Random random = new Random();
                     Playlocation = random.Next(0, playlist.Count);
-                    await ProcessSong(playlist[Playlocation], ts3Client, playManager, invoker);
+                    await ProcessSong(playlist[Playlocation], ts3Client, playManager, invoker, tsClient);
                     break;
                 case 3:  //随机循环
                     Random random1 = new Random();
                     Playlocation = random1.Next(0, playlist.Count);
-                    await ProcessSong(playlist[Playlocation], ts3Client, playManager, invoker);
+                    await ProcessSong(playlist[Playlocation], ts3Client, playManager, invoker, tsClient);
                     break;
                 default:
                     break;
@@ -447,7 +443,7 @@ public class YunPlugin : IBotPlugin
             await ChangeNameToMusicName(tsClient, SelfName, true);
         }
     }
-    private async Task ProcessSong(long id, Ts3Client ts3Client, PlayManager playManager, InvokerData invoker)
+    private async Task ProcessSong(long id, Ts3Client ts3Client, PlayManager playManager, InvokerData invoker, TsFullClient tsClient)
     {
         await playlock.WaitAsync();
         try {
@@ -472,16 +468,6 @@ public class YunPlugin : IBotPlugin
                 name = name.Substring(0, 27) + "...";
             }
 
-            //设置Bot的昵称为音乐名称
-            try {
-                await MainCommands.CommandBotName(ts3Client, name);
-            }catch(Exception)
-            {
-                if(SelfName != "")
-                {
-                    _ = MainCommands.CommandBotName(ts3Client, SelfName);
-                }
-            }
             // 设置Bot的头像为音乐图片
             _ = MainCommands.CommandBotAvatarSet(ts3Client, musicImgUrl);
             // 设置Bot的描述为音乐名称
@@ -493,6 +479,24 @@ public class YunPlugin : IBotPlugin
             if (musicUrl != "error")
             {
                 _ = MainCommands.CommandPlay(playManager, invoker, musicUrl);
+                //设置Bot的昵称为音乐名称
+                try {
+                    
+                    // 获取Bot现在的名称
+                    string NowName = "";
+                    R<TSLib.Messages.WhoAmI, TSLib.Messages.CommandError> t = await tsClient.WhoAmI();
+                    NowName = t.Unwrap().Name;
+                    Console.WriteLine($"SelfName={SelfName}");
+                    if(name != NowName) {
+                        await MainCommands.CommandBotName(ts3Client, name);
+                    }
+                }catch(Exception)
+                {
+                    if(SelfName != "")
+                    {
+                        _ = MainCommands.CommandBotName(ts3Client, SelfName);
+                    }
+                }
 
                 // 更新Bot的描述为当前播放的音乐名称
                 _ = MainCommands.CommandBotDescriptionSet(ts3Client, musicName);
@@ -506,6 +510,9 @@ public class YunPlugin : IBotPlugin
                 {
                     _ = ts3Client.SendChannelMessage($"正在播放第{Playlocation+1}首：{musicName}");
                 }
+            } else
+            {
+                _ = MainCommands.CommandBotName(ts3Client, SelfName);
             }
         }
         catch(Exception e)
