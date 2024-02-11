@@ -178,6 +178,7 @@ public class YunPlugin : IBotPlugin
             _ = ProcessSong(yunSearchSong.result.songs[0].id, ts3Client, playManager, invoker);
             await Listeninglock.WaitAsync();
             playManager.ResourceStopped += async (sender, e) => await SongPlayMode(playManager, invoker, ts3Client, tsClient);
+            Listeninglock.Release();
             songFound = true;
         }
         /*
@@ -256,8 +257,10 @@ public class YunPlugin : IBotPlugin
         {
             _ = ProcessSong(playlist[0], ts3Client, playManager, invoker);
         }
+
         await Listeninglock.WaitAsync();
         playManager.ResourceStopped += async (sender, e) => await SongPlayMode(playManager, invoker, ts3Client, tsClient);
+        Listeninglock.Release();
     }
     //===========================================添加到歌单=========================================
 
@@ -318,6 +321,7 @@ public class YunPlugin : IBotPlugin
         Console.WriteLine($"歌单共{playlist.Count}首歌");
         await Listeninglock.WaitAsync();
         playManager.ResourceStopped += async (sender, e) => await SongPlayMode(playManager, invoker, ts3Client, tsClient);
+        Listeninglock.Release();
         return $"播放列表加载完成,已加载{playlist.Count}首歌";
     }
     //===========================================歌单播放===========================================
@@ -370,6 +374,7 @@ public class YunPlugin : IBotPlugin
         Console.WriteLine($"歌单共{playlist.Count}首歌");
         await Listeninglock.WaitAsync();
         playManager.ResourceStopped += async (sender, e) => await SongPlayMode(playManager, invoker, ts3Client, tsClient);
+        Listeninglock.Release();
         return $"播放列表加载完成,已加载{playlist.Count}首歌";
     }
     //===========================================歌单id播放===========================================
@@ -464,9 +469,9 @@ public class YunPlugin : IBotPlugin
             //设置Bot的昵称为音乐名称
             _ = MainCommands.CommandBotName(ts3Client, name);
             // 设置Bot的头像为音乐图片
-            _ =  MainCommands.CommandBotAvatarSet(ts3Client, musicImgUrl);
+            _ = MainCommands.CommandBotAvatarSet(ts3Client, musicImgUrl);
             // 设置Bot的描述为音乐名称
-            _ =  MainCommands.CommandBotDescriptionSet(ts3Client, musicName);
+            _ = MainCommands.CommandBotDescriptionSet(ts3Client, musicName);
             // 在控制台输出音乐播放URL
             Console.WriteLine(musicUrl);
 
